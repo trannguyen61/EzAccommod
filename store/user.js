@@ -1,4 +1,4 @@
-import responseHelper from '@/helpers/responseHelper'
+import ResponseHelper from '@/helpers/ResponseHelper'
 import CustomError from '@/helpers/CustomError'
 
 export const state = () => ({

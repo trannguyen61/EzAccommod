@@ -1,4 +1,4 @@
-class responseHelper {
+class ResponseHelper {
     constructor (response) {
         this.data = response.data.data
         this.status = response.status
@@ -32,4 +32,4 @@ class responseHelper {
     }
 }
 
-export default responseHelper
+export default ResponseHelper
