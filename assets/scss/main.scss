@@ -1,12 +1,14 @@
-$primary: #005aff;
-$secondary: #276ce3;
+$primary: #f6dddf;
+$secondary: #df9c9d;
 $success: #53d86a;
 $info: #05b168;
 $warning: #ffcb2f;
 $danger: #fd3d39;
 $light: #f7f7f7;
-$dark: #3a3d42;
+$dark: #687a80;
 $shadow: rgb(0, 0, 0, 0.3);
+
+$border-radius: 10px;
 
 html,
 body {
@@ -27,6 +29,9 @@ body {
   box-sizing: border-box;
   margin: 0;
 }
+
+@import "~vuetify/src/styles/settings/_variables";
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap");
 
 @import "app/custom";
 @import "app/app";

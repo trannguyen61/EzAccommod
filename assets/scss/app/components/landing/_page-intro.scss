@@ -1,0 +1,85 @@
+.page-intro {
+  /*
+  * 100vh - 2 * naviagtion bar padding - navigation bar actual height
+  */
+  padding: 15px 0;
+  background-color: $primary;
+  display: flex;
+  flex-direction: column;
+
+  @media #{map-get($display-breakpoints, 'md-and-up')} {
+    height: calc(100vh - 20px * 2 - 47.5px);
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .landing-img {
+    max-height: 70%;
+    width: 100%;
+
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      margin-top: 10%;
+      margin-right: -10%;
+    }
+
+    @media #{map-get($display-breakpoints, 'lg-and-up')} {
+      margin-top: 10%;
+      margin-right: -5%;
+    }
+  }
+
+  .intro {
+    margin-top: 5%;
+    color: $dark;
+
+    &--title {
+      display: inline;
+      background-color: $light;
+      font-size: 3em;
+      font-weight: bold;
+      font-family: "Playfair Display", serif;
+      padding: 5px 15px;
+
+      @media #{map-get($display-breakpoints, 'md-and-up')} {
+        font-size: 3.5em;
+      }
+
+      @media #{map-get($display-breakpoints, 'lg-and-up')} {
+        font-size: 5em;
+      }
+    }
+
+    &--text {
+      margin-top: 10px;
+      background-color: $light;
+      font-size: 1.1em;
+      color: grey;
+      padding: 10px 15px;
+
+      @media #{map-get($display-breakpoints, 'md-and-up')} {
+        font-size: 1.2em;
+      }
+
+      @media #{map-get($display-breakpoints, 'lg-and-up')} {
+        font-size: 1.4em;
+      }
+    }
+
+    &--btn {
+      margin-top: 15px;
+      font-size: 1.2rem;
+
+      .icon {
+        margin-left: 15px;
+        color: $dark;
+        transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+      }
+
+      &:hover > .icon {
+        color: $light;
+        transform: translateX(10px);
+      }
+    }
+  }
+}

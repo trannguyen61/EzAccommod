@@ -1,3 +1,50 @@
+button {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container.container--fluid {
+  padding: 0 !important;
+}
+
+.custom-btn {
+  border-radius: $border-radius !important;
+
+  &--text {
+    font-size: 1em;
+    font-weight: 300;
+    padding: 5px 10px;
+
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      font-size: 1.1em;
+    }
+  }
+
+  &__secondary {
+    color: $secondary;
+  }
+
+  &__densed {
+    background-color: $primary;
+    color: $dark;
+    padding: 7px 10px;
+    font-weight: 400;
+    transition: background-color, color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      padding: 7px 15px;
+    }
+
+    &:hover {
+      background-color: $secondary;
+      color: $light;
+    }
+  }
+}
+
 .vue-notification {
   padding: 10px;
   margin: 0 5px 5px;

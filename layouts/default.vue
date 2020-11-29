@@ -2,6 +2,7 @@
 <div>
   <notifications position="top right"/>
   <v-app>
+    <custom-navbar/>
     <v-container fluid>
       <Nuxt />
     </v-container>  
@@ -10,6 +11,9 @@
 </template>
 
 <script>
+import CustomNavbar from '@/components/CustomNavbar'
+
 export default {
+    components: { CustomNavbar }
 }
 </script>
