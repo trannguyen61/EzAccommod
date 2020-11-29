@@ -1,0 +1,68 @@
+.room-list-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px 20px;
+  border: 1px solid $dark;
+  border-radius: $border-radius;
+
+  @media #{map-get($display-breakpoints, 'md-and-up')} {
+    padding: 20px 25px;
+    flex-direction: row;
+  }
+
+  .img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      margin-left: 30px;
+      margin-top: 0;
+    }
+
+    .title-group:hover {
+      cursor: pointer;
+
+      & .icon {
+        transform: translateX(10px);
+        color: $primary;
+      }
+    }
+
+    .title {
+      font-size: 1.4em !important;
+
+      .icon {
+        margin-left: 15px;
+        transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+      }
+    }
+
+    .price {
+      font-weight: bold;
+      color: $dark;
+      font-size: 1.3em;
+    }
+
+    .text {
+      @media #{map-get($display-breakpoints, 'md-and-up')} {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+    .favorite {
+      margin-top: auto;
+      margin-left: auto;
+    }
+  }
+}

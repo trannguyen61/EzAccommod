@@ -149,6 +149,13 @@
         </div>
       </div>
     </transition>
+
+    <button
+      v-ripple
+      class="custom-btn custom-btn--text custom-btn__densed mt-4"
+    >
+      Tìm kiếm
+    </button>
   </div>
 </template>
 
