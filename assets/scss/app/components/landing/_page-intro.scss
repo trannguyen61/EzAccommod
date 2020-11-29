@@ -3,7 +3,7 @@
   * 100vh - 2 * naviagtion bar padding - navigation bar actual height
   */
   padding: 15px 0;
-  background-color: $primary;
+  background-color: $secondary;
   display: flex;
   flex-direction: column;
 
@@ -21,11 +21,13 @@
     @media #{map-get($display-breakpoints, 'md-and-up')} {
       margin-top: 10%;
       margin-right: -10%;
+      width: auto;
     }
 
     @media #{map-get($display-breakpoints, 'lg-and-up')} {
       margin-top: 10%;
       margin-right: -5%;
+      width: auto;
     }
   }
 

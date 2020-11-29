@@ -24,11 +24,11 @@ a {
   }
 
   &__secondary {
-    color: $secondary;
+    color: $primary;
   }
 
   &__densed {
-    background-color: $primary;
+    background-color: $secondary;
     color: $dark;
     padding: 7px 10px;
     font-weight: 400;
@@ -39,7 +39,7 @@ a {
     }
 
     &:hover {
-      background-color: $secondary;
+      background-color: $primary;
       color: $light;
     }
   }
@@ -53,7 +53,7 @@ a {
 
   color: #ffffff;
   background: $primary;
-  border-left: 5px solid $secondary;
+  border-left: 5px solid;
 
   &.warn {
     background: $warning !important;
@@ -69,4 +69,57 @@ a {
     background: $success !important;
     border-left-color: #42a85f !important;
   }
+}
+
+/*
+* Transitions
+*/
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-to-side-enter-active,
+.slide-to-side-leave-active {
+  transition-duration: 0.5s;
+  transition-property: height, opacity, transform;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.slide-to-side-enter,
+.slide-to-side-leave-to {
+  transform: translateX(15px);
+}
+
+.spin-enter-active,
+.spin-leave-active {
+  transition: all 0.3s ease;
+}
+
+.spin-enter {
+  transform: rotate(30deg);
+  opacity: 0;
+}
+
+.spin-leave-to {
+  transform: rotate(-30deg);
+  opacity: 0;
+}
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition-duration: 0.5s;
+  transition-property: height, opacity, transform;
+  transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.slide-down-enter,
+.slide-down-leave-to {
+  transform: translateY(15px);
+  opacity: 0;
 }

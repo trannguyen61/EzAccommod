@@ -1,0 +1,15 @@
+.filter {
+  padding: 15px 20px;
+  @media #{map-get($display-breakpoints, 'md-and-up')} {
+    width: 25%;
+  }
+
+  &--title {
+    font-weight: 500;
+    font-size: 1.1em;
+  }
+
+  .item-title {
+    margin-bottom: 10px;
+  }
+}
