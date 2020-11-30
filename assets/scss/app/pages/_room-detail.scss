@@ -1,6 +1,8 @@
 .room-detail {
-  padding: 15px 20px;
-  background-color: $secondary;
+  .show-detail {
+    background-color: $secondary;
+    padding: 15px 20px;
+  }
 
   .carousel-img {
     width: 100%;
@@ -49,22 +51,33 @@
     transform: translateX(-50%);
   }
 
-  .detail-list-item {
+  .item--title {
     color: $dark;
-    font-size: 1.1em;
+    font-size: 1.6rem;
+    font-weight: bold;
+    display: inline;
+    padding: 0 10px;
+    background: linear-gradient(
+        transparent 0 33%,
+        white 33% 66%,
+        transparent 66% 100%
+      )
+      no-repeat;
 
-    .item--title {
-      font-size: 1.4em;
-      font-weight: bold;
-      display: inline;
-      padding: 0 10px;
+    &__secondary-ribbon {
+      color: $dark;
       background: linear-gradient(
           transparent 0 33%,
-          white 33% 66%,
+          $secondary 33% 66%,
           transparent 66% 100%
         )
         no-repeat;
     }
+  }
+
+  .detail-list-item {
+    color: $dark;
+    font-size: 1.1em;
 
     .item--content {
       padding: 5px 15px;
