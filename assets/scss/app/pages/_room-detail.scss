@@ -1,0 +1,95 @@
+.room-detail {
+  padding: 15px 20px;
+  background-color: $secondary;
+
+  .carousel-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .carousel-mask {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+
+  .carousel:hover .carousel-mask {
+    display: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $dark;
+    opacity: 0.3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .carousel-look {
+    opacity: 1;
+    padding: 15px;
+    border-radius: 99px;
+    background-color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .tool {
+    background-color: white;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 5px 10px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .detail-list-item {
+    color: $dark;
+    font-size: 1.1em;
+
+    .item--title {
+      font-size: 1.4em;
+      font-weight: bold;
+      display: inline;
+      padding: 0 10px;
+      background: linear-gradient(
+          transparent 0 33%,
+          white 33% 66%,
+          transparent 66% 100%
+        )
+        no-repeat;
+    }
+
+    .item--content {
+      padding: 5px 15px;
+      background-color: white;
+      border-radius: $border-radius;
+    }
+
+    .item--subtitle {
+      display: inline;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+
+    .item--text {
+      display: inline;
+      padding-bottom: 5px;
+    }
+
+    .price {
+      font-size: 1.5em;
+      font-weight: bolder;
+      padding: 5px 15px;
+      color: white;
+      background-color: $dark;
+      display: inline;
+    }
+  }
+}

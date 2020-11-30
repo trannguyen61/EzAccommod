@@ -1,0 +1,226 @@
+<template>
+  <div class="room-detail">
+    <v-row justify="space-around">
+      <v-col
+        cols="12"
+        md="5"
+      >
+        <v-carousel
+          cycle
+          height="400"
+          hide-delimiter-background
+          show-arrows-on-hover
+          class="carousel"
+        >
+          <v-carousel-item
+            v-for="(img, i) in room.imgs"
+            :key="i"
+          >
+            <div class="carousel-mask">
+              <v-icon
+                large
+                color="primary"
+                class="carousel-look"
+                @click="openImgViewer(img)"
+              >
+                fas fa-search
+              </v-icon>
+            </div>
+            <img
+              :src="require('@/assets/images/room01.jpg')"
+              alt=""
+              class="carousel-img"
+            >
+          </v-carousel-item>
+        </v-carousel>
+
+        <div class="tool">
+          <v-tooltip top>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                class="favorite mx-2"
+                v-bind="attrs"
+                v-on="on"
+                @click="favRoom"
+              >
+                <v-icon
+                  color="primary"
+                >
+                  fas fa-heart
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Yêu thích</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs"
+                class="report mx-2"
+                v-on="on"
+                @click="reportRoom"
+              >
+                <v-icon
+                  color="dark"
+                >
+                  fas fa-flag
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Báo cáo</span>
+          </v-tooltip>
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        md="5"
+      >
+        <v-row>
+          <v-col
+            cols="12"
+          >
+            <div class="detail-list-item">
+              <div class="item--title">
+                Thông tin liên lạc
+              </div>
+              <div class="item--content">
+                <div>
+                  <div class="item--subtitle">
+                    Họ tên chủ trọ:
+                  </div>
+                  <div class="item--text">
+                    {{ room.owner.name }}
+                  </div>
+                </div>
+                <div>
+                  <div class="item--subtitle">
+                    Số điện thoại liên lạc:
+                  </div>
+                  <div class="item--text">
+                    {{ room.owner.phone }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col
+            cols="12"
+          >
+            <div class="detail-list-item mt-4">
+              <div class="item--title">
+                {{ defaultRoom.roomTypes.find(e => e.value == room.type).name || '' }}
+              </div>
+            </div>
+            <v-simple-table>
+              <template #default>
+                <tbody>
+                  <tr>
+                    <td>Diện tích</td>
+                    <td>{{ room.square }} m<sup>2</sup></td>
+                  </tr>
+
+                  <tr>
+                    <td>Số phòng cho thuê</td>
+                    <td>{{ room.roomNum }} phòng</td>
+                  </tr>
+
+                  <tr>
+                    <td>Địa chỉ</td>
+                    <td>
+                      {{ room.address }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Landmark</td>
+                    <td>
+                      {{ room.detailedAddress }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Cơ sở vật chất</td>
+                    <td>
+                      <ul class="facilities ml-auto mr-auto">
+                        <li
+                          v-for="fac in room.facilities"
+                          :key="fac"
+                        >
+                          {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <div class="detail-list-item mt-4">
+              <div class="item--title">
+                Giá thuê <br>
+              </div>
+              <div class="price">
+                {{ room.price }} đồng/tháng
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+    <img-viewer
+      ref="img-viewer"
+    />
+  </div>
+</template>
+
+<script>
+import ImgViewer from '@/components/landing/ImgViewer'
+import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
+
+export default {
+    components: { ImgViewer },
+
+    data () {
+        return {
+            room: {
+                id: '123',
+                type: 1,
+                roomNum: 2,
+                square: 30,
+                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
+                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
+                price: '1.000.000',
+                facilities: [1, 2, 3],
+                imgs: [ 'https://i.imgur.com/v39ykUw.jpeg' ],
+                owner: {
+                    name: 'Nakayama Haruki',
+                    phone: '113'
+                }
+            },
+            defaultRoom: {
+                roomTypes: ROOM_TYPES,
+                roomFacilities: ROOM_FACILITIES
+            }
+        }
+    },
+
+    methods: {
+        openImgViewer (img) {
+            this.$refs['img-viewer'].open(img)
+        },
+
+        favRoom () {},
+
+        reportRoom () {}
+    }
+}
+</script>
