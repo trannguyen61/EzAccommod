@@ -15,6 +15,7 @@
         <button
           v-ripple
           class="intro--btn custom-btn custom-btn--text custom-btn__densed"
+          @click="$router.push('#rooms')"
         >
           Khám phá ngay <v-icon class="icon">
             fas fa-chevron-right

@@ -11,6 +11,7 @@
       v-if="$vuetify.breakpoint.mdAndUp"
       v-ripple
       class="custom-btn custom-btn--text mx-5"
+      @click="onSignup"
     >
       Đăng ký
     </button>
@@ -18,6 +19,7 @@
       v-if="$vuetify.breakpoint.mdAndUp"
       v-ripple
       class="custom-btn custom-btn--text custom-btn__densed"
+      @click="onLogin"
     >
       Đăng nhập
     </button>
@@ -59,12 +61,29 @@
 </template>
 
 <script>
+import ApiHandler from '@/helpers/ApiHandler'
+import { mapActions } from 'vuex'
+
 export default {
   data () {
     return {
       menu: false
     }
-  }
+  },
 
+  methods: {
+    ...mapActions({
+      signup: 'user/signup',
+      login: 'user/login'
+    }),
+
+    async onSignup () {
+
+    },
+
+    async onLogin () {
+
+    }
+  }
 }
 </script>

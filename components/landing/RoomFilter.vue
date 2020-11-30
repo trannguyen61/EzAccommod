@@ -153,6 +153,7 @@
     <button
       v-ripple
       class="custom-btn custom-btn--text custom-btn__densed mt-4"
+      @click="onFilterRoom"
     >
       Tìm kiếm
     </button>
@@ -161,6 +162,7 @@
 
 <script>
 import { ROOM_PRICE_RANGE, ROOM_TYPES, ROOM_SQUARE_RANGE, ROOM_FACILITIES } from '@/consts/consts'
+
 export default {
     data () {
         return {
@@ -179,5 +181,11 @@ export default {
             }
         }
     },
+
+    methods: {
+      onFilterRoom () {
+        this.$emit('filter', this.filter)
+      }
+    }
 }
 </script>

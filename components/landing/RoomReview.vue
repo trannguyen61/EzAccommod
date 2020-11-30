@@ -26,6 +26,7 @@
         <button
           v-ripple
           class="custom-btn custom-btn--text custom-btn__densed d-block ml-auto"
+          @click="onSubmitReview"
         >
           Gửi đánh giá
         </button>
@@ -43,6 +44,9 @@
 
 <script>
 import ReviewItem from '@/components/landing/ReviewItem'
+
+import ApiHandler from '@/helpers/ApiHandler'
+import { mapActions } from 'vuex'
 
 export default {
     components: { ReviewItem },
@@ -63,6 +67,28 @@ export default {
     computed: {
         commentRules () {
             return [v => v.length <= 300 || 'Tối đa 300 ký tự.']
+        }
+    },
+
+    methods: {
+        ...mapActions({
+            submitReview: 'room/submitReview',
+            getReviews: 'room/getReviews'
+        }),
+
+        async onSubmitReview () {
+            const data = {
+                rating: this.rating,
+                comment: this.comment
+            }
+            const handler = new ApiHandler().setData(data)
+            await this.submitReview(handler)
+        },
+
+        async onGetReviews () {
+            const handler = new ApiHandler()
+                            .setOnResponse(res => this.commentList = res)
+            await this.submitReview(handler)
         }
     }
 }

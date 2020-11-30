@@ -1,5 +1,6 @@
 import ResponseHelper from '@/helpers/ResponseHelper'
 import CustomError from '@/helpers/CustomError'
+import Vue from 'vue'
 
 export const state = () => ({
   access_token: null,
@@ -37,4 +38,94 @@ export const mutations = {
 }
 
 export const actions = {
+    async signup({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.signup(handler.data)
+        const response = new responseHelper(rawData)
+
+        if (response.isError()) {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Đăng ký thất bại", errorMessage)
+        }
+      }
+
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    async login({ commit, state }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.login(handler.data)
+        const response = new responseHelper(rawData)
+
+        if (response.isSuccess()) {
+          const { access_token } = response.getData()
+          commit('setAccessToken', access_token)
+          return access_token
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Đăng nhập thất bại", errorMessage)
+        }
+      }
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    async loginWithFacebook({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.loginWithFacebook(handler.data)
+        const response = new responseHelper(rawData)
+
+        if (response.isSuccess()) {
+          const { access_token } = response.getData()
+          commit('setAccessToken', access_token)
+          return access_token
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Đăng nhập thất bại", errorMessage)
+        }
+      }
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    async fetchUser({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.getUserProfile()
+        const response = new responseHelper(rawData)
+        
+        if (response.isSuccess()) {
+          commit('setUser', response.getData())
+          if (!handler.turnOffSuccess) {
+            notificationHelper.notifySuccess('Đăng nhập thành công', 'Chào mừng bạn đến với Private Parking!')
+          }
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Lấy thông tin người dùng thất bại", errorMessage)
+        }  
+      }
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    async changePassword({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.changePassword(handler.data)
+        const response = new responseHelper(rawData)
+        
+        if (response.isSuccess()) {
+          notificationHelper.notifySuccess('Thành công', 'Mật khẩu của bạn đã được thay đổi!')
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Có lỗi khi thay đổi mật khẩu", errorMessage)
+        }  
+      }
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    logout ({commit}) {
+      commit('setAccessToken', null)
+      commit('setUser', null)
+      Vue.notify({
+        type: 'success',
+        title: 'Đăng xuất thành công',
+    })
+  }
 }
+

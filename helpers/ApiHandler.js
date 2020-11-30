@@ -1,4 +1,4 @@
-import notificationHelper from './notificationHelper'
+import Vue from 'vue'
 
 class ApiHandler {
     constructor() {
@@ -8,6 +8,8 @@ class ApiHandler {
         this.onResponse = () => { }
         this.onError = () => { }
         this.onFinally = () => { }
+        this.turnOffWarning = false
+        this.turnOffSuccess = false
     }
 
     setData(data) {
@@ -40,8 +42,22 @@ class ApiHandler {
         return this
     }
 
+    setTurnOffWarning() {
+        this.turnOffWarning = true
+        return this
+    }
+
+    setTurnOffSuccess() {
+        this.turnOffSuccess = true
+        return this
+    }
+
     notifyError(err) {
-        notificationHelper.notifyError(err.name, err.message)
+        Vue.notify({
+            type: 'error',
+            title: err.name,
+            text: err.message
+        })
     }
 
     async execute() {
@@ -50,8 +66,8 @@ class ApiHandler {
             const data = await this.onRequest()
             this.onResponse(data)
         } catch (err) {
-            this.notifyError(err)
-            this.onError()
+            if (!this.turnOffWarning) this.notifyError(err)
+            this.onError(err)
         } finally {
             this.onFinally()
         }

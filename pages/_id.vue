@@ -43,7 +43,7 @@
                   class="favorite mx-2"
                   v-bind="attrs"
                   v-on="on"
-                  @click="favRoom"
+                  @click="onFavoriteRoom"
                 >
                   <v-icon
                     color="primary"
@@ -52,7 +52,7 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <span>Yêu thích</span>
+              <span>{{ room.favorite }} yêu thích</span>
             </v-tooltip>
             <v-tooltip top>
               <template #activator="{ on, attrs }">
@@ -61,7 +61,7 @@
                   v-bind="attrs"
                   class="report mx-2"
                   v-on="on"
-                  @click="reportRoom"
+                  @click="onReportRoom"
                 >
                   <v-icon
                     color="dark"
@@ -197,13 +197,17 @@
 <script>
 import RoomReview from '@/components/landing/RoomReview'
 import ImgViewer from '@/components/landing/ImgViewer'
+
 import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
+import ApiHandler from '@/helpers/ApiHandler'
+import { mapActions } from 'vuex'
 
 export default {
     components: { RoomReview, ImgViewer },
 
     data () {
         return {
+            id: null,
             room: {
                 id: '123',
                 type: 1,
@@ -213,6 +217,7 @@ export default {
                 detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
                 facilities: [1, 2, 3],
+                favorite: 2,
                 imgs: [ 'https://i.imgur.com/v39ykUw.jpeg' ],
                 owner: {
                     name: 'Nakayama Haruki',
@@ -226,14 +231,43 @@ export default {
         }
     },
 
+    mounted () {
+        this.id = this.$route.params.id
+    },
+
     methods: {
+        ...mapActions({
+            favoriteRoom: 'room/favoriteRoom',
+            reportRoom: 'room/reportRoom',
+            getRoomDetail: 'room/getRoomDetail'
+        }),
+
         openImgViewer (img) {
             this.$refs['img-viewer'].open(img)
         },
 
-        favRoom () {},
+        async onFavoriteRoom () {
+            const data = { id: this.id }
+            const handler = new ApiHandler()
+                            .setData(data)
+                            .setOnResponse(res => this.room = res)
+            await this.favoriteRoom(handler)
+        },
 
-        reportRoom () {}
+        async onReportRoom () {
+            const data = { id: this.id }
+            const handler = new ApiHandler()
+                            .setData(data)
+            await this.reportRoom(handler)
+        },
+
+        async onGetRoomDetail () {
+            const data = { id: this.id }
+            const handler = new ApiHandler()
+                            .setData(data)
+                            .setOnResponse(res => this.room = res)
+            await this.getRoomDetail(handler)
+        }
     }
 }
 </script>
