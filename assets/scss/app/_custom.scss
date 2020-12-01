@@ -6,6 +6,10 @@ a {
   text-decoration: none;
 }
 
+.link-text {
+  color: $dark !important;
+}
+
 .container.container--fluid {
   padding: 0 !important;
 }
@@ -41,6 +45,20 @@ a {
     &:hover {
       background-color: $primary;
       color: $light;
+    }
+  }
+
+  &__block {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  &:disabled {
+    background-color: lightgray !important;
+
+    &:hover {
+      cursor: auto;
     }
   }
 }

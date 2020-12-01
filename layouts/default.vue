@@ -1,13 +1,16 @@
 <template>
-<div>
-  <notifications position="top right"/>
-  <v-app>
-    <custom-navbar/>
-    <v-container fluid>
-      <Nuxt />
-    </v-container>  
-  </v-app>
-</div>
+  <div class="default-layout">
+    <notifications position="top right" />
+    <v-app>
+      <custom-navbar />
+      <v-container
+        fluid
+        class="container"
+      >
+        <Nuxt />
+      </v-container>  
+    </v-app>
+  </div>
 </template>
 
 <script>

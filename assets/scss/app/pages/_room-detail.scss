@@ -58,18 +58,18 @@
     display: inline;
     padding: 0 10px;
     background: linear-gradient(
-        transparent 0 33%,
-        white 33% 66%,
-        transparent 66% 100%
+        transparent 0 60%,
+        white 60% 88%,
+        transparent 88% 100%
       )
       no-repeat;
 
     &__secondary-ribbon {
       color: $dark;
       background: linear-gradient(
-          transparent 0 33%,
-          $secondary 33% 66%,
-          transparent 66% 100%
+          transparent 0 60%,
+          $secondary 60% 88%,
+          transparent 88% 100%
         )
         no-repeat;
     }
