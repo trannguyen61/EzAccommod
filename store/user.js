@@ -41,7 +41,7 @@ export const actions = {
     async signup({ commit }, handler) {
       const onRequest = async () => {
         const rawData = await this.$userServices.signup(handler.data)
-        const response = new responseHelper(rawData)
+        const response = new ResponseHelper(rawData)
 
         if (response.isError()) {
           const errorMessage = response.getErrorMessage()
@@ -55,7 +55,7 @@ export const actions = {
     async login({ commit, state }, handler) {
       const onRequest = async () => {
         const rawData = await this.$userServices.login(handler.data)
-        const response = new responseHelper(rawData)
+        const response = new ResponseHelper(rawData)
 
         if (response.isSuccess()) {
           const { access_token } = response.getData()
@@ -72,7 +72,7 @@ export const actions = {
     async loginWithFacebook({ commit }, handler) {
       const onRequest = async () => {
         const rawData = await this.$userServices.loginWithFacebook(handler.data)
-        const response = new responseHelper(rawData)
+        const response = new ResponseHelper(rawData)
 
         if (response.isSuccess()) {
           const { access_token } = response.getData()
@@ -89,12 +89,16 @@ export const actions = {
     async fetchUser({ commit }, handler) {
       const onRequest = async () => {
         const rawData = await this.$userServices.getUserProfile()
-        const response = new responseHelper(rawData)
+        const response = new ResponseHelper(rawData)
         
         if (response.isSuccess()) {
           commit('setUser', response.getData())
           if (!handler.turnOffSuccess) {
-            notificationHelper.notifySuccess('Đăng nhập thành công', 'Chào mừng bạn đến với Private Parking!')
+            Vue.notify({
+                type: 'success',
+                title: 'Đăng nhập thành công',
+                text: 'Chào mừng bạn đến với EzAccommod! Chúc bạn có những trải nghiệm tuyệt vời tại trang.'
+            })
           }
         } else {
           const errorMessage = response.getErrorMessage()
@@ -107,7 +111,7 @@ export const actions = {
     async changePassword({ commit }, handler) {
       const onRequest = async () => {
         const rawData = await this.$userServices.changePassword(handler.data)
-        const response = new responseHelper(rawData)
+        const response = new ResponseHelper(rawData)
         
         if (response.isSuccess()) {
           notificationHelper.notifySuccess('Thành công', 'Mật khẩu của bạn đã được thay đổi!')

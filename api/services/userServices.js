@@ -10,4 +10,14 @@ export default $axios => ({
     login (payload) {
         // return $axios.get(API_GET_ROOM_LIST)
     },
+
+    getUserProfile (payload) {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
+
+    loginWithFacebook (payload) {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
 })
+
+

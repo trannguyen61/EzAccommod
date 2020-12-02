@@ -1,8 +1,8 @@
 <template>
-  <div class="auth register">
+  <div class="auth login">
     <div class="auth-form">
       <div class="auth-form--title">
-        Đăng ký
+        Đăng nhập
       </div>
 
       <v-tabs
@@ -43,9 +43,9 @@
               type="button"
               :disabled="!formValue"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
-              @click="onSignup"
+              @click="onLogin"
             >
-              Hoàn tất đăng ký
+              Đăng nhập
             </button>
 
             <v-divider class="my-6" />
@@ -59,55 +59,27 @@
             class="auth-form--form"
           >
             <v-text-field
-              v-model="form.name"
-              :rules="requiredField()"
-              label="Họ tên"
-              class="mt-3"
-            />
-
-            <v-text-field
-              v-model="form.identityNum"
-              :rules="requiredField()"
-              label="Căn cước công dân/CMND"
-              class="mt-3"
-            />
-
-            <v-text-field
-              v-model="form.address"
-              :rules="requiredField()"
-              label="Địa chỉ thường trú"
-              class="mt-3"
-            />
-
-            <v-text-field
-              v-model="form.phone"
-              :rules="isPhoneNumber()"
-              label="Số điện thoại"
-              class="mt-3"
-            />
-
-            <v-text-field
               v-model="form.email"
               :rules="isEmail()"
               label="Email"
-              class="mt-3"
+              class="mt-6"
             />
 
             <v-text-field
               v-model="form.password"
               :rules="validPassword()"
               label="Mật khẩu"
-              class="mt-3"
+              class="mt-6"
             />
 
             <button
               v-ripple
               type="button"
               :disabled="!formValue"
-              class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-3 mb-9"
-              @click="onSignup"
+              class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
+              @click="onLogin"
             >
-              Hoàn tất đăng ký
+              Đăng nhập
             </button>
           </v-form>
         </v-tab-item>
@@ -133,39 +105,27 @@ export default {
             form: {
                 email: '',
                 password: '',
-                name: '',
-                identityNum: '',
-                address: '',
-                phone: ''
             }
         }
     },
 
     methods: {
         ...mapActions({
-            signup: 'user/signup'
+            login: 'user/login'
         }),
 
-        async onSignup () {
+        async onLogin () {
           const data = this.form
           const handler = new ApiHandler()
                         .setData(data)
-                        .setOnResponse(res => {
+                        .setOnResponse(() => {
                           this.$router.push('/')
                         })
-          await this.signup(handler)
+          await this.login(handler)
         },
 
         isEmail () {
             return [validationRules.requiredField, validationRules.isEmail]
-        },
-
-        requiredField () {
-            return [validationRules.requiredField]
-        },
-
-        isPhoneNumber () {
-            return [validationRules.isPhoneNumber]
         },
 
         validPassword () {
