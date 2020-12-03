@@ -28,8 +28,16 @@
       Đăng nhập
     </button>
 
+    <v-icon
+      v-if="$vuetify.breakpoint.smAndDown && sidebar"
+      color="primary"
+      @click="$emit('toggle-navbar')"
+    >
+      fas fa-bars
+    </v-icon>
+
     <v-menu 
-      v-if="$vuetify.breakpoint.smAndDown" 
+      v-if="$vuetify.breakpoint.smAndDown && !sidebar" 
       offset-y
       transition="slide-y-transition"
       min-width="120px"
@@ -66,10 +74,17 @@
 
 <script>
 export default {
+  props: {
+    sidebar: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data () {
     return {
       menu: false
     }
-  }
+  },
 }
 </script>
