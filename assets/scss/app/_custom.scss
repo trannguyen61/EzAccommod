@@ -63,6 +63,36 @@ a {
   }
 }
 
+.card-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.item--title {
+  color: $dark;
+  font-size: 1.6rem;
+  font-weight: bold;
+  display: inline;
+  padding: 0 10px;
+  background: linear-gradient(
+      transparent 0 60%,
+      white 60% 88%,
+      transparent 88% 100%
+    )
+    no-repeat;
+
+  &__secondary-ribbon {
+    color: $dark;
+    background: linear-gradient(
+        transparent 0 60%,
+        $secondary 60% 88%,
+        transparent 88% 100%
+      )
+      no-repeat;
+  }
+}
+
 .vue-notification {
   padding: 10px;
   margin: 0 5px 5px;

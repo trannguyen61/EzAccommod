@@ -124,4 +124,19 @@ export const actions = {
         }
         await handler.setOnRequest(onRequest).execute()
     },
+
+    async getFavoriteRooms ({ commit }, handler) {
+      const onRequest = async () => {
+          const rawData = await this.$roomServices.getFavoriteRooms(handler.data)
+          const response = new ResponseHelper(rawData)
+          
+          if (response.isSuccess()) {
+              return response.getData()
+          } else {
+            const errorMessage = response.getErrorMessage()
+            throw new CustomError("Có lỗi khi tải đánh giá", errorMessage)
+          }  
+      }
+      await handler.setOnRequest(onRequest).execute()
+  },
 }

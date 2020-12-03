@@ -10,7 +10,7 @@
     <div class="content">
       <div
         class="title-group"
-        @click="$router.push(`${room.id}`)"
+        @click="$router.push(`/${room.id}`)"
       >
         <div class="title">
           {{ defaultRoom.roomTypes.find(e => e.value == room.type).name || '' }}
@@ -46,8 +46,18 @@
       <v-btn
         icon
         class="favorite"
+        @click="onFavoriteRoom"
       >
-        <v-icon color="primary">
+        <v-icon
+          v-if="!room.favorite"
+          color="primary"
+        >
+          far fa-heart
+        </v-icon>
+        <v-icon
+          v-else
+          color="primary"
+        >
           fas fa-heart
         </v-icon>
       </v-btn>
@@ -57,6 +67,9 @@
 
 <script>
 import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
+import ApiHandler from '@/helpers/ApiHandler'
+import { mapActions } from 'vuex'
+
 export default {
     props: {
         room: {
@@ -72,6 +85,18 @@ export default {
                 roomFacilities: ROOM_FACILITIES
             }
         }
+    },
+
+    methods: {
+      ...mapActions({
+        favoriteRoom: 'room/favoriteRoom'
+      }),
+
+      async onFavoriteRoom () {
+        const data = {}
+        const handler = new ApiHandler().setData(data)
+        await this.favoriteRoom(handler)
+      }
     }
 }
 </script>

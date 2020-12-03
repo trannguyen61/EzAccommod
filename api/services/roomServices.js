@@ -30,4 +30,8 @@ export default $axios => ({
     getReviews () {
         // return $axios.get(API_GET_ROOM_LIST)
     },
+    
+    getFavoriteRooms () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
 })
