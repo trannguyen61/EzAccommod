@@ -63,10 +63,9 @@ a {
   }
 }
 
-.card-title {
+.form-title {
   font-size: 1.1em;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .item--title {
@@ -117,6 +116,10 @@ a {
     background: $success !important;
     border-left-color: #42a85f !important;
   }
+}
+
+.v-stepper__step__step .v-icon.v-icon {
+  font-size: 1rem !important;
 }
 
 /*

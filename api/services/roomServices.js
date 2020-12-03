@@ -34,4 +34,12 @@ export default $axios => ({
     getFavoriteRooms () {
         // return $axios.get(API_GET_ROOM_LIST)
     },
+
+    submitPost () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
+
+    getPostFee () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
 })
