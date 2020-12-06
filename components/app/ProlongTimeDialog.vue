@@ -19,7 +19,7 @@
         />
 
         <v-text-field
-          v-model="postFee"
+          :value="postFee"
           readonly
           label="Phí hiển thị bài đăng (bổ sung)"
           class="mt-6 mx-8"
@@ -54,13 +54,25 @@ import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
 export default {
+    props: {
+      post: {
+            type: Object,
+            default: () => ({})
+        }
+    },
+
     data () {
         return {
             dialog: false,
             time: null,
-            postFee: null,
-            dueDate: null
+            postFee: null
         }
+    },
+
+    computed: {
+      dueDate () {
+        return this.post ? this.post.dueDate : ''
+      }
     },
 
     methods: {

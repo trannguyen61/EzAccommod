@@ -39,6 +39,10 @@ export default $axios => ({
         // return $axios.get(API_GET_ROOM_LIST)
     },
 
+    editPost () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
+
     getPostFee () {
         // return $axios.get(API_GET_ROOM_LIST)
     },

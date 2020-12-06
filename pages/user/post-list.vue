@@ -43,7 +43,7 @@
             type="button"
             :disabled="item.checked"
             class="custom-btn custom-btn--text custom-btn__densed"
-            @click="onClickEditBtn"
+            @click="onClickEditBtn(item)"
           >
             <v-icon>fas fa-tools</v-icon>
           </button>
@@ -88,19 +88,26 @@
 
     <prolong-time-dialog
       ref="prolong-time-dialog"
+      :post="chosenPost"
+    />
+    <edit-post-dialog
+      ref="edit-post-dialog"
+      :post="chosenPost"
     />
   </div>
 </template>
 
 <script>
 import ProlongTimeDialog from '@/components/app/ProlongTimeDialog'
+import EditPostDialog from '@/components/app/EditPostDialog'
+
 import { ROOM_TYPES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
 export default {
 
-    components: { ProlongTimeDialog },
+    components: { ProlongTimeDialog, EditPostDialog },
     layout: 'app',
 
     data () {
@@ -111,7 +118,7 @@ export default {
                 roomNum: 2,
                 square: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
+                detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
                 facilities: [1, 2, 3],
                 favorite: 10,
@@ -126,7 +133,7 @@ export default {
                 roomNum: 2,
                 square: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
+                detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
                 facilities: [1, 2, 3],
                 favorite: 6,
@@ -179,10 +186,13 @@ export default {
           await this.toggleActivePost(handler)
         },
 
-        onClickEditBtn () {},
+        onClickEditBtn (item) {
+          this.chosenPost = item
+          this.$refs['edit-post-dialog'].open()
+        },
 
         onClickProlongTimeBtn (item) {
-          this.$refs['prolong-time-dialog'].dueDate = item.dueDate
+          this.chosenPost = item
           this.$refs['prolong-time-dialog'].open()
         },
 
