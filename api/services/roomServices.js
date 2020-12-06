@@ -42,4 +42,18 @@ export default $axios => ({
     getPostFee () {
         // return $axios.get(API_GET_ROOM_LIST)
     },
+
+    getPosts (query) {
+        // return $axios.get(API_GET_ROOM_LIST, {
+        //     params: query
+        // })
+    },
+
+    toggleActivePost () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
+
+    prolongTimePost () {
+        // return $axios.get(API_GET_ROOM_LIST)
+    }
 })

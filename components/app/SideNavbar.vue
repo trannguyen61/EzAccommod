@@ -49,6 +49,18 @@
           </v-list-item-content>
         </v-list-item>
       </nuxt-link>
+
+      <nuxt-link to="/user/post-list">
+        <v-list-item class="my-2">
+          <v-list-item-icon>
+            <v-icon>fas fa-list</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Danh sách bài đăng</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </nuxt-link>
     </v-list>
   </v-navigation-drawer>
 </template>

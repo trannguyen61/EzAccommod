@@ -173,4 +173,53 @@ async getPostFee ({ commit }, handler) {
   }
   await handler.setOnRequest(onRequest).execute()
 },
+
+async getPosts ({ commit }, {handler, query}) {
+  const onRequest = async () => {
+      const rawData = await this.$roomServices.getPosts(query)
+      const response = new ResponseHelper(rawData)
+      
+      if (response.isSuccess()) {
+        return response.getData()
+      } else {
+        const errorMessage = response.getErrorMessage()
+        throw new CustomError("Có lỗi khi tải bài", errorMessage)
+      }  
+  }
+  await handler.setOnRequest(onRequest).execute()
+},
+
+async toggleActivePost ({ commit }, handler) {
+  const onRequest = async () => {
+      const rawData = await this.$roomServices.toggleActivePost(handler.data)
+      const response = new ResponseHelper(rawData)
+      
+      if (response.isSuccess()) {
+        return response.getData()
+      } else {
+        const errorMessage = response.getErrorMessage()
+        throw new CustomError("Có lỗi khi chuyển trạng thái bài", errorMessage)
+      }  
+  }
+  await handler.setOnRequest(onRequest).execute()
+},
+
+async prolongTimePost ({ commit }, handler) {
+  const onRequest = async () => {
+      const rawData = await this.$roomServices.prolongTimePost(handler.data)
+      const response = new ResponseHelper(rawData)
+      
+      if (response.isSuccess()) {
+        Vue.notify({
+          type: 'success',
+          title: 'Gửi yêu cầu gia hạn bài đăng thành công',
+          text: 'Bài đăng của bạn sẽ được gia hạn sau khi kiểm duyệt. Cảm ơn bạn đã yêu cầu!'
+        })
+      } else {
+        const errorMessage = response.getErrorMessage()
+        throw new CustomError("Có lỗi khi chuyển trạng thái bài", errorMessage)
+      }  
+  }
+  await handler.setOnRequest(onRequest).execute()
+},
 }

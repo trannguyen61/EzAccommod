@@ -369,6 +369,7 @@
                 label="Thời gian hiển thị bài đăng"
                 placeholder="6 tháng"
                 class="mt-6 mx-8"
+                @change="onGetPostFee"
               />
 
               <v-text-field
