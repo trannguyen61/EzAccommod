@@ -40,7 +40,7 @@ export const actions = {
             })
           } else {
             const errorMessage = response.getErrorMessage()
-            throw new CustomError("Có lỗi khi tải tài khoản", errorMessage)
+            throw new CustomError("Có lỗi khi duyệt tài khoản", errorMessage)
           }  
         }
   
@@ -62,5 +62,24 @@ export const actions = {
 
       await handler.setOnRequest(onRequest).execute()
     },
+
+    async approvePost({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$managingServices.approvePost(handler.data)
+        const response = new ResponseHelper(rawData)
+
+        if (response.isSuccess()) {
+          Vue.notify({
+              type: 'success',
+              title: 'Duyệt bài đăng thành công',
+          })
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Có lỗi khi duyệt bài đăng", errorMessage)
+        }  
+      }
+
+      await handler.setOnRequest(onRequest).execute()
+  },
 }
 

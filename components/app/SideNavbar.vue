@@ -73,6 +73,18 @@
           </v-list-item-content>
         </v-list-item>
       </nuxt-link>
+
+      <nuxt-link to="/app/approve-posts">
+        <v-list-item class="my-2">
+          <v-list-item-icon>
+            <v-icon>fas fa-toggle-on</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Duyệt bài đăng</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </nuxt-link>
     </v-list>
   </v-navigation-drawer>
 </template>
