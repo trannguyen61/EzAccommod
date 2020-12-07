@@ -29,7 +29,7 @@
     <!-- Button for medium and up screens + Logged in -->
     <template v-if="$vuetify.breakpoint.mdAndUp && loggedIn">
       <v-btn
-        to="/user"
+        to="/app"
         nuxt
         icon
       >
@@ -42,18 +42,14 @@
       <button
         v-ripple
         class="custom-btn custom-btn--text mx-5"
-        @click="$router.push('/register')"
+        @click="$router.push('/auth/register')"
       >
-        <nuxt-link
-          to="/register"
-          class="link-text"
-        >
-          Đăng ký
-        </nuxt-link>
+        Đăng ký
       </button>
       <button
         v-ripple
         class="custom-btn custom-btn--text custom-btn__densed"
+        @click="$router.push('/auth/login')"
       >
         Đăng nhập
       </button>

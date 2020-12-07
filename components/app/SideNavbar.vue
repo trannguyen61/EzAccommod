@@ -26,7 +26,7 @@
       dense
       nav
     >
-      <nuxt-link to="/user/favorite">
+      <nuxt-link to="/app/favorite">
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-heart</v-icon>
@@ -38,7 +38,7 @@
         </v-list-item>
       </nuxt-link>
 
-      <nuxt-link to="/user/create-post">
+      <nuxt-link to="/app/create-post">
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-edit</v-icon>
@@ -50,7 +50,7 @@
         </v-list-item>
       </nuxt-link>
 
-      <nuxt-link to="/user/post-list">
+      <nuxt-link to="/app/post-list">
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-list</v-icon>
@@ -58,6 +58,18 @@
 
           <v-list-item-content>
             <v-list-item-title>Danh sách bài đăng</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </nuxt-link>
+
+      <nuxt-link to="/app/acc-list">
+        <v-list-item class="my-2">
+          <v-list-item-icon>
+            <v-icon>fas fa-address-card</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Danh sách tài khoản</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </nuxt-link>
