@@ -27,3 +27,8 @@ export const ROOM_FACILITIES = [
     { name: 'Có máy giặt', value: 9 }, 
     { name: 'Có giường tủ', value: 10 } 
 ]
+export const ROOM_VIOLATIONS = [
+    { id: 1, text: 'Thông tin không chính xác' },
+    { id: 2, text: 'Phòng không tồn tại' },
+    { id: 3, text: 'Chủ trọ có thái độ không đúng mực' }
+]

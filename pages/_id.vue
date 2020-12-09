@@ -191,19 +191,25 @@
         <room-review />
       </v-col>
     </v-row>
+
+    <report-dialog
+      :id="id"
+      ref="report-dialog"
+    />
   </div>
 </template>
 
 <script>
 import RoomReview from '@/components/landing/RoomReview'
 import ImgViewer from '@/components/landing/ImgViewer'
+import ReportDialog from '@/components/landing/ReportDialog'
 
 import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
 export default {
-    components: { RoomReview, ImgViewer },
+    components: { RoomReview, ImgViewer, ReportDialog },
 
     data () {
         return {
@@ -238,7 +244,6 @@ export default {
     methods: {
         ...mapActions({
             favoriteRoom: 'room/favoriteRoom',
-            reportRoom: 'room/reportRoom',
             getRoomDetail: 'room/getRoomDetail'
         }),
 
@@ -255,10 +260,7 @@ export default {
         },
 
         async onReportRoom () {
-            const data = { id: this.id }
-            const handler = new ApiHandler()
-                            .setData(data)
-            await this.reportRoom(handler)
+            this.$refs['report-dialog'].open()
         },
 
         async onGetRoomDetail () {

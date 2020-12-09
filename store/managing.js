@@ -81,5 +81,40 @@ export const actions = {
 
       await handler.setOnRequest(onRequest).execute()
   },
+
+  async getReports({ commit }, handler) {
+    const onRequest = async () => {
+      const rawData = await this.$managingServices.getReports(handler.data)
+      const response = new ResponseHelper(rawData)
+
+      if (response.isSuccess()) {
+          return response.getData()
+      } else {
+        const errorMessage = response.getErrorMessage()
+        throw new CustomError("Có lỗi khi tải báo cáo", errorMessage)
+      }  
+    }
+
+    await handler.setOnRequest(onRequest).execute()
+  },
+
+  async resolveReport({ commit }, handler) {
+    const onRequest = async () => {
+      const rawData = await this.$managingServices.resolveReport(handler.data)
+      const response = new ResponseHelper(rawData)
+
+      if (response.isSuccess()) {
+        Vue.notify({
+            type: 'success',
+            title: 'Giải quyết báo cáo thành công',
+        })
+      } else {
+        const errorMessage = response.getErrorMessage()
+        throw new CustomError("Có lỗi khi giải quyết báo cáo", errorMessage)
+      }  
+    }
+
+    await handler.setOnRequest(onRequest).execute()
+  },
 }
 

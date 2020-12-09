@@ -85,6 +85,18 @@
           </v-list-item-content>
         </v-list-item>
       </nuxt-link>
+
+      <nuxt-link to="/app/report-list">
+        <v-list-item class="my-2">
+          <v-list-item-icon>
+            <v-icon>fas fa-exclamation-triangle</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Báo cáo vi phạm</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </nuxt-link>
     </v-list>
   </v-navigation-drawer>
 </template>

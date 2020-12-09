@@ -13,5 +13,13 @@ export default $axios => ({
 
     filterAccounts (payload) {
         // return $axios.get(API_GET_ROOM_LIST)
+    },
+
+    getReports (payload) {
+        // return $axios.get(API_GET_ROOM_LIST)
+    },
+
+    resolveReport (payload) {
+        // return $axios.get(API_GET_ROOM_LIST)
     }
 })
