@@ -1,0 +1,13 @@
+.filter-page {
+  display: flex;
+  flex-direction: column;
+
+  @media #{map-get($display-breakpoints, 'md-and-up')} {
+    flex-direction: row;
+  }
+
+  .room-list {
+    padding: 15px 20px;
+    width: 100%;
+  }
+}

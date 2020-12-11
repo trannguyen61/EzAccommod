@@ -3,12 +3,19 @@ import CustomError from '@/helpers/CustomError'
 import Vue from 'vue'
 
 export const state = () => ({
+  filter: null
 })
 
 export const getters = {
+  filter (state) {
+    return state.filter
+  }
 }
 
 export const mutations = {
+  setFilter (state, filter) {
+    state.filter = filter
+  }
 }
 
 export const actions = {

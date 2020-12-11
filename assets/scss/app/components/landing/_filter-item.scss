@@ -1,0 +1,21 @@
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px 20px;
+  border: 1px solid $dark;
+  border-radius: $border-radius;
+
+  .img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: bottom;
+  }
+
+  .title-group .title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}

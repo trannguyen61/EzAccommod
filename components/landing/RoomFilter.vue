@@ -44,6 +44,7 @@
           </div>
           <div class="item--input">
             <v-select
+              v-model="filter.city"
               :items="[1, 2, 3]"
               label="Thành phố"
               outlined
@@ -52,7 +53,9 @@
               class="mb-2"
             />
             <v-select
+              v-model="filter.district"
               :items="[1, 2, 3]"
+              :disabled="!filter.city"
               label="Quận/huyện"
               outlined
               hide-details
@@ -60,7 +63,9 @@
               class="mb-2"
             />
             <v-select
+              v-model="filter.ward"
               :items="[1, 2, 3]"
+              :disabled="!filter.district"
               label="Phường"
               outlined
               hide-details
@@ -162,6 +167,7 @@
 
 <script>
 import { ROOM_PRICE_RANGE, ROOM_TYPES, ROOM_SQUARE_RANGE, ROOM_FACILITIES } from '@/consts/consts'
+import { mapMutations } from 'vuex'
 
 export default {
     data () {
@@ -171,7 +177,10 @@ export default {
                 price: [500, 7000],
                 roomTypes: [],
                 square: [10, 100],
-                facilities: []
+                facilities: [],
+                city: null,
+                district: null,
+                ward: null
             },
             defaultRoom: {
                 roomPriceRanges: ROOM_PRICE_RANGE,
@@ -183,8 +192,13 @@ export default {
     },
 
     methods: {
+      ...mapMutations({
+        setFilter: 'room/setFilter'
+      }),
+
       onFilterRoom () {
-        this.$emit('filter', this.filter)
+        this.$emit('filtered')
+        this.setFilter(this.filter)
       }
     }
 }

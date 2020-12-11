@@ -48,8 +48,7 @@ export default {
                 price: '1.000.000',
                 facilities: [1, 2, 3]
         }],
-        roomPagination: 1,
-        filter: null
+        roomPagination: 1
       }
     },
 
@@ -60,7 +59,6 @@ export default {
     methods: {
       ...mapActions({
         getRoomList: 'room/getRoomList',
-        filterRooms: 'room/filterRooms'
       }),
 
       async onGetRoomList () {
@@ -73,17 +71,10 @@ export default {
         await this.getRoomList(handler)
       },
 
-      getFilter (filter) {
-        this.filter = filter
-        this.onFilterRooms()
-      },
-
-      async onFilterRooms () {
-        const data = this.filter
-        const handler = new ApiHandler()
-                      .setData(data)
-                      .setOnResponse(res => this.rooms = res)
-        await this.filterRooms(handler)
+      getFilter () {
+        this.$router.push({
+          path: '/filter'
+        })
       },
     }
 }
