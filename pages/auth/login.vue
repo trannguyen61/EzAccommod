@@ -23,6 +23,7 @@
           <v-form
             v-model="formValue"
             class="auth-form--form"
+            @submit.prevent="onLogin"
           >
             <v-text-field
               v-model="form.email"
@@ -34,16 +35,18 @@
             <v-text-field
               v-model="form.password"
               :rules="validPassword()"
+              :append-icon="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"
+              :type="showPassword ? 'text' : 'password'"
               label="Mật khẩu"
               class="mt-6"
+              @click:append="showPassword = !showPassword"
             />
 
             <button
               v-ripple
-              type="button"
+              type="submit"
               :disabled="!formValue"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
-              @click="onLogin"
             >
               Đăng nhập
             </button>
@@ -57,6 +60,7 @@
           <v-form
             v-model="formValue"
             class="auth-form--form"
+            @submit.prevent="onLogin"
           >
             <v-text-field
               v-model="form.email"
@@ -68,16 +72,18 @@
             <v-text-field
               v-model="form.password"
               :rules="validPassword()"
+              :append-icon="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"
+              :type="showPassword ? 'text' : 'password'"
               label="Mật khẩu"
               class="mt-6"
+              @click:append="showPassword = !showPassword"
             />
 
             <button
               v-ripple
-              type="button"
+              type="submit"
               :disabled="!formValue"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
-              @click="onLogin"
             >
               Đăng nhập
             </button>
@@ -101,6 +107,7 @@ export default {
     data () {
         return {
             tab: null,
+            showPassword: false,
             formValue: false,
             form: {
                 email: '',

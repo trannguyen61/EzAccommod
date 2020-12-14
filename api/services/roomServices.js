@@ -4,7 +4,7 @@ import {
 
 export default $axios => ({
     getRoomList () {
-        // return $axios.get(API_GET_ROOM_LIST)
+        return $axios.get(API_GET_ROOM_LIST)
     },
 
     filterRooms (payload) {

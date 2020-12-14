@@ -13,7 +13,7 @@ export const getters = {
   },
 
   loggedIn(state) {
-    return state.access_token
+    return !!state.access_token
   },
 
   user(state) {
@@ -33,7 +33,13 @@ export const mutations = {
   },
 
   setUser (state, user) {
-    state.user = user
+    if (!user) {
+      localStorage.removeItem('user')
+      state.user = null
+    } else {
+      localStorage.setItem('user', user)
+      state.user = user  
+    }
   }
 }
 
@@ -43,7 +49,11 @@ export const actions = {
         const rawData = await this.$userServices.signup(handler.data)
         const response = new ResponseHelper(rawData)
 
-        if (response.isError()) {
+        if (response.isSuccess()) {
+          const { token, user } = response.getData()
+          commit('setAccessToken', token)
+          commit('setUser', user)
+        } else {
           const errorMessage = response.getErrorMessage()
           throw new CustomError("Đăng ký thất bại", errorMessage)
         }
@@ -58,9 +68,9 @@ export const actions = {
         const response = new ResponseHelper(rawData)
 
         if (response.isSuccess()) {
-          const { access_token } = response.getData()
-          commit('setAccessToken', access_token)
-          return access_token
+          const { token, user } = response.getData()
+          commit('setAccessToken', token)
+          commit('setUser', user)
         } else {
           const errorMessage = response.getErrorMessage()
           throw new CustomError("Đăng nhập thất bại", errorMessage)
@@ -123,13 +133,24 @@ export const actions = {
       await handler.setOnRequest(onRequest).execute()
     },
 
-    logout ({commit}) {
-      commit('setAccessToken', null)
-      commit('setUser', null)
-      Vue.notify({
-        type: 'success',
-        title: 'Đăng xuất thành công',
-    })
+    async logout ({commit}, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.logout(handler.data)
+        const response = new ResponseHelper(rawData)
+        
+        if (response.isSuccess()) {
+          commit('setAccessToken', null)
+          commit('setUser', null)
+          Vue.notify({
+            type: 'success',
+            title: 'Đăng xuất thành công',
+          })
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Có lỗi khi đăng xuất mật khẩu", errorMessage)
+        }  
+      }
+      await handler.setOnRequest(onRequest).execute()
   }
 }
 
