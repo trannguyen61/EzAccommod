@@ -139,7 +139,7 @@
           </div>
           <div class="item--input">
             <v-select
-              v-model="filter.facilities"
+              v-model="filter.services"
               :items="defaultRoom.roomFacilities"
               item-value="value"
               item-text="name"
@@ -177,7 +177,7 @@ export default {
                 price: [500, 7000],
                 roomTypes: [],
                 square: [10, 100],
-                facilities: [],
+                services: [],
                 city: null,
                 district: null,
                 ward: null

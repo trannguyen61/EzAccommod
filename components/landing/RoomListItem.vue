@@ -36,7 +36,7 @@
         </div>
         <ul class="facilities ml-auto mr-auto">
           <li
-            v-for="fac in room.facilities"
+            v-for="fac in room.services"
             :key="fac"
           >
             {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}

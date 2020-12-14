@@ -46,14 +46,14 @@ export default {
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                 detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
-                facilities: [1, 2, 3]
+                services: [1, 2, 3]
         }],
         roomPagination: 1
       }
     },
 
     mounted () {
-      this.onGetRoomList()
+      // this.onGetRoomList()
     },
 
     methods: {

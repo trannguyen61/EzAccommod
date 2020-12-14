@@ -25,7 +25,11 @@ export const ROOM_FACILITIES = [
     { name: 'Điện nước giá dân', value: 7 }, 
     { name: 'Có tủ lạnh', value: 8 }, 
     { name: 'Có máy giặt', value: 9 }, 
-    { name: 'Có giường tủ', value: 10 } 
+    { name: 'Có giường tủ', value: 10 },
+    { name: 'Chung chủ', value: 11},
+    { name: 'Không chung chủ', value: 12},  
+    { name: 'Phòng tắm chung', value: 13}, 
+    { name: 'Điện nước giá thuê', value: 14 }, 
 ]
 export const ROOM_VIOLATIONS = [
     { id: 1, text: 'Thông tin không chính xác' },

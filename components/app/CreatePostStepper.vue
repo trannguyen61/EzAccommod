@@ -1,13 +1,14 @@
 <template>
   <v-stepper
     v-model="step"
+    class="create-post-stepper"
   >
     <v-stepper-header>
       <v-stepper-step
         :complete="step > 1"
         step="1"
       >
-        Địa chỉ phòng trọ
+        Thông tin cơ bản
       </v-stepper-step>
 
       <v-divider />
@@ -16,110 +17,31 @@
         :complete="step > 2"
         step="2"
       >
-        Thông tin cơ bản
-      </v-stepper-step>
-
-      <v-divider />
-
-      <v-stepper-step
-        :complete="step > 3"
-        step="3"
-      >
         Thông tin chi tiết
       </v-stepper-step>
 
       <v-divider />
-
-      <v-stepper-step
-        step="4"
-      >
-        Xác nhận thông tin
-      </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-form v-model="formValue1">
           <div class="d-flex">
-            <v-select
-              v-model="form.city"
-              :items="[1, 2, 3]"
-              :rules="requiredField()"
-              label="Tỉnh/Thành phố"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-            <v-select
-              v-model="form.district"
-              :items="[1, 2, 3]"
-              :rules="requiredField()"
-              label="Quận/Huyện/Thị xã"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-          </div>
-          <div class="d-flex">
-            <v-select
-              v-model="form.ward"
-              :items="[1, 2, 3]"
-              :rules="requiredField()"
-              label="Phường"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
             <v-text-field
-              v-model="form.detailAddress"
+              v-model="form.price"
               :rules="requiredField()"
-              label="Địa chỉ cụ thể"
-              placeholder="Số 1 Phạm Văn Đồng"
+              label="Giá (VNĐ)"
               class="mt-6 mx-8"
               style="width: 100%;"
+              @input="formatPrice"
             />
           </div>
-          <v-text-field
-            v-model="form.addressDescription"
-            label="Miêu tả địa chỉ"
-            placeholder="Gần trường Đại học Công nghệ"
-            class="mt-6 mx-8"
-          />
-        </v-form>
-
-        <button
-          v-ripple
-          type="button"
-          :disabled="!formValue1"
-          class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
-          @click="step = 2"
-        >
-          Tiếp tục
-        </button>
-      </v-stepper-content>
-
-      <v-stepper-content step="2">
-        <v-form v-model="formValue2">
           <div class="d-flex">
-            <v-select
-              v-model="form.type"
-              :items="[1, 2, 3]"
-              :rules="requiredField()"
-              label="Loại phòng"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
             <v-text-field
               v-model="form.number"
               :rules="requiredField()"
               label="Số lượng phòng"
               type="number"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-          </div>
-          <div class="d-flex">
-            <v-text-field
-              v-model="form.price"
-              :rules="requiredField()"
-              label="Giá (VNĐ)"
               class="mt-6 mx-8"
               style="width: 100%;"
             />
@@ -137,9 +59,9 @@
         <button
           v-ripple
           type="button"
-          :disabled="!formValue2"
+          :disabled="!formValue1"
           class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
-          @click="step = 3"
+          @click="step = 2"
         >
           Tiếp tục
         </button>
@@ -154,9 +76,13 @@
         </button>
       </v-stepper-content>
 
-      <v-stepper-content step="3">
-        <v-form v-model="formValue3">
-          <v-simple-table class="mx-8">
+      <v-stepper-content step="2">
+        <v-form v-model="formValue2">
+          <v-simple-table
+            fixed-header
+            class="mx-8"
+            style="overflow-y: hidden"
+          >
             <template #default>
               <thead>
                 <tr>
@@ -179,11 +105,11 @@
                     >
                       <v-radio
                         :label="'Có chung chủ'"
-                        value="1"
+                        value="11"
                       />
                       <v-radio
                         :label="'Không chung chủ'"
-                        value="0"
+                        value="12"
                       />
                     </v-radio-group>
                   </td>
@@ -201,7 +127,7 @@
                       />
                       <v-radio
                         :label="'Phòng tắm chung'"
-                        value="0"
+                        value="13"
                       />
                     </v-radio-group>
                     <v-radio-group
@@ -210,7 +136,7 @@
                     >
                       <v-radio
                         :label="'Có bình nóng lạnh'"
-                        value="1"
+                        value="2"
                       />
                       <v-radio
                         :label="'Không có bình nóng lạnh'"
@@ -228,11 +154,11 @@
                     >
                       <v-radio
                         :label="'Khu bếp riêng'"
-                        value="2"
+                        value="3"
                       />
                       <v-radio
                         :label="'Khu bếp chung'"
-                        value="1"
+                        value="4"
                       />
                       <v-radio
                         :label="'Không nấu ăn'"
@@ -250,7 +176,7 @@
                     >
                       <v-radio
                         :label="'Có điều hòa'"
-                        value="1"
+                        value="5"
                       />
                       <v-radio
                         :label="'Không điều hòa'"
@@ -268,7 +194,7 @@
                     >
                       <v-radio
                         :label="'Có ban công'"
-                        value="1"
+                        value="6"
                       />
                       <v-radio
                         :label="'Không ban công'"
@@ -286,11 +212,11 @@
                     >
                       <v-radio
                         :label="'Điện nước giá dân'"
-                        value="1"
+                        value="7"
                       />
                       <v-radio
                         :label="'Điện nước giá thuê'"
-                        value="0"
+                        value="14"
                       />
                     </v-radio-group>
                   </td>
@@ -298,20 +224,23 @@
                 <tr>
                   <td>Tiện ích khác</td>
                   <td>
-                    <v-radio-group v-model="form.services.other">
-                      <v-radio
-                        :label="'Tủ lạnh'"
-                        value="2"
-                      />
-                      <v-radio
-                        :label="'Máy giặt'"
-                        value="1"
-                      />
-                      <v-radio
-                        :label="'Giường tủ'"
-                        value="0"
-                      />
-                    </v-radio-group>
+                    <v-checkbox
+                      v-model="form.services.other"
+                      :label="'Tủ lạnh'"
+                      value="8"
+                      hide-details
+                    />
+                    <v-checkbox
+                      v-model="form.services.other"
+                      :label="'Máy giặt'"
+                      value="9"
+                      hide-details
+                    />
+                    <v-checkbox
+                      v-model="form.services.other"
+                      :label="'Giường tủ'"
+                      value="10"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -322,69 +251,11 @@
         <button
           v-ripple
           type="button"
-          :disabled="!formValue3"
-          class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
-          @click="step = 4"
-        >
-          Tiếp tục
-        </button>
-
-        <button
-          v-ripple
-          type="button"
-          class="custom-btn custom-btn--text"
-          @click="step -= 1"
-        >
-          Lùi về
-        </button>
-      </v-stepper-content>
-
-      <v-stepper-content step="4">
-        <v-form v-model="formValue4">
-          <div class="d-flex">
-            <v-text-field
-              :value="'Nakayama Haruki'"
-              readonly
-              label="Họ tên chủ trọ"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-            <v-text-field
-              :value="'113'"
-              readonly
-              label="Số điện thoại liên lạc"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-          </div>
-            
-          <v-select
-            v-model="form.time"
-            :rules="requiredField()"
-            :items="['1 tuần', '1 tháng', 'Từ giờ cho đến mãi sau này']"
-            label="Thời gian hiển thị bài đăng"
-            placeholder="6 tháng"
-            class="mt-6 mx-8"
-            @change="onGetPostFee"
-          />
-
-          <v-text-field
-            :value="postFee"
-            readonly
-            label="Phí hiển thị bài đăng"
-            class="mt-6 mx-8"
-            style="width: 100%;"
-          />
-        </v-form>
-
-        <button
-          v-ripple
-          type="button"
-          :disabled="!formValue4"
+          :disabled="!formValue2"
           class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
           @click="onSubmitPost"
         >
-          Gửi yêu cầu xét duyệt bài đăng
+          Hoàn tất
         </button>
 
         <button
@@ -405,11 +276,6 @@ import validationRules from '@/helpers/validationRules'
 
 export default {
     props: {
-        postFee: {
-            type: String,
-            default: ''
-        },
-
         post: {
             type: Object,
             default: () => ({})
@@ -421,15 +287,7 @@ export default {
             step: 1,
             formValue1: false,
             formValue2: false,
-            formValue3: false,
-            formValue4: false,
             form: {
-                city: null,
-                district: null,
-                ward: null,
-                detailAddress: null,
-                addressDescription: null,
-                type: null,
                 number: null,
                 price: null,
                 square: null,
@@ -441,9 +299,8 @@ export default {
                     aircond: null,
                     velanda: null,
                     elecPrice: null,
-                    other: null
-                },
-                time: null
+                    other: []
+                }
             }
         }
     },
@@ -461,12 +318,20 @@ export default {
             if (this.form.time) this.onGetPostFee()
         },
 
-        onGetPostFee () {
-            this.$emit('on-get-post-fee', this.form.time)
+        onSubmitPost () {
+            this.convertServices()
+            this.$emit('on-submit-post', this.form)
         },
 
-        onSubmitPost () {
-            this.$emit('on-submit-post', this.form)
+        convertServices () {
+          const services = Object.keys(this.form.services).map(serviceName => {
+            if (serviceName !== 'other' && !!this.form.services[serviceName]) return this.form.services[serviceName]
+          }).filter(service => !!service && service != 0).concat(this.form.services.other)
+          this.form.services = services
+        },
+
+        formatPrice () {
+            this.form.price = new Intl.NumberFormat('vi-VN').format(this.form.price.replace(/\D/g, ''))
         },
 
         requiredField () {
