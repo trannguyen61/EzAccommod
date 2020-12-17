@@ -1,5 +1,6 @@
 import {
-    API_GET_ROOM_LIST
+    API_GET_ROOM_LIST,
+    API_CREATE_POST
 } from '@/api/apiUrl'
 
 export default $axios => ({
@@ -35,8 +36,8 @@ export default $axios => ({
         // return $axios.get(API_GET_ROOM_LIST)
     },
 
-    submitPost () {
-        // return $axios.get(API_GET_ROOM_LIST)
+    submitPost (payload) {
+        return $axios.post(API_CREATE_POST, payload)
     },
 
     editPost () {

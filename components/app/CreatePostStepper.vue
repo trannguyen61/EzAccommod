@@ -100,7 +100,7 @@
                   <td>Chung chủ</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.withOwner"
+                      v-model="services.withOwner"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -118,7 +118,7 @@
                   <td>Phòng tắm</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.bathroom"
+                      v-model="services.bathroom"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -131,7 +131,7 @@
                       />
                     </v-radio-group>
                     <v-radio-group
-                      v-model="form.services.heater"
+                      v-model="services.heater"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -149,7 +149,7 @@
                   <td>Phòng bếp</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.kitchen"
+                      v-model="services.kitchen"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -171,7 +171,7 @@
                   <td>Điều hòa</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.aircond"
+                      v-model="services.aircond"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -189,7 +189,7 @@
                   <td>Ban công</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.velanda"
+                      v-model="services.velanda"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -207,7 +207,7 @@
                   <td>Điện nước</td>
                   <td>
                     <v-radio-group
-                      v-model="form.services.elecPrice"
+                      v-model="services.elecPrice"
                       :rules="requiredField()"
                     >
                       <v-radio
@@ -225,19 +225,19 @@
                   <td>Tiện ích khác</td>
                   <td>
                     <v-checkbox
-                      v-model="form.services.other"
+                      v-model="services.other"
                       :label="'Tủ lạnh'"
                       value="8"
                       hide-details
                     />
                     <v-checkbox
-                      v-model="form.services.other"
+                      v-model="services.other"
                       :label="'Máy giặt'"
                       value="9"
                       hide-details
                     />
                     <v-checkbox
-                      v-model="form.services.other"
+                      v-model="services.other"
                       :label="'Giường tủ'"
                       value="10"
                     />
@@ -272,6 +272,7 @@
 </template>
 
 <script>
+import { SERVICE_BY_NAME } from '@/consts/consts'
 import validationRules from '@/helpers/validationRules'
 
 export default {
@@ -291,17 +292,19 @@ export default {
                 number: null,
                 price: null,
                 square: null,
-                services: {
-                    withOwner: null,
-                    bathroom: null,
-                    heater: null,
-                    kitchen: null,
-                    aircond: null,
-                    velanda: null,
-                    elecPrice: null,
-                    other: []
-                }
-            }
+                services: []
+            },
+            services: {
+              withOwner: null,
+              bathroom: null,
+              heater: null,
+              kitchen: null,
+              aircond: null,
+              velanda: null,
+              elecPrice: null,
+              other: []
+            },
+            serviceByName: SERVICE_BY_NAME
         }
     },
 
@@ -311,10 +314,12 @@ export default {
 
     methods: {
         getChosenPost () {
+            if (!this.post) return
+            console.log('post')
             Object.keys(this.post).forEach(e => {
                 this.form[e] = this.post[e]
             })
-            
+            this.convertArrayToServices()
             if (this.form.time) this.onGetPostFee()
         },
 
@@ -324,10 +329,24 @@ export default {
         },
 
         convertServices () {
-          const services = Object.keys(this.form.services).map(serviceName => {
-            if (serviceName !== 'other' && !!this.form.services[serviceName]) return this.form.services[serviceName]
-          }).filter(service => !!service && service != 0).concat(this.form.services.other)
+          const services = Object.keys(this.services).reduce((res, key) => {
+            if (key && key != '0') {
+              return res.concat(this.services[key])
+            }
+          }, [])
           this.form.services = services
+        },
+
+        convertArrayToServices () {
+          this.form.services.forEach(e => {
+            const serviceName = this.serviceByName[e]
+            if (serviceName == 'other') {
+              if (!this.services.other) this.services.other = []
+              this.services[serviceName].push(e)
+            } else if (serviceName) {
+              this.services[serviceName] = e
+            }
+          })
         },
 
         formatPrice () {

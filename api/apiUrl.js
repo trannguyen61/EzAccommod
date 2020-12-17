@@ -16,3 +16,4 @@ export const API_LOGOUT = API_USER + '/logout'
 */
 export const API_ROOM_SERVICE = '/post'
 export const API_GET_ROOM_LIST = API_ROOM_SERVICE
+export const API_CREATE_POST = API_ROOM_SERVICE + '/new-post'

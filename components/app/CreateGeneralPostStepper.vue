@@ -96,16 +96,20 @@
             <v-col>
               <div class="d-flex">
                 <v-select
-                  v-model="form.city"
-                  :items="[1, 2, 3]"
+                  v-model="form.address.city"
+                  :items="['Hà Nội']"
+                  item-text="name"
+                  item-value="id"
                   :rules="requiredField()"
                   label="Tỉnh/Thành phố"
                   class="mt-6 mx-8"
                   style="width: 100%;"
                 />
                 <v-select
-                  v-model="form.district"
-                  :items="[1, 2, 3]"
+                  v-model="form.address.district"
+                  :items="defaultInfo.hanoiDistricts"
+                  item-text="name"
+                  item-value="id"
                   :rules="requiredField()"
                   label="Quận/Huyện/Thị xã"
                   class="mt-6 mx-8"
@@ -114,15 +118,17 @@
               </div>
               <div class="d-flex">
                 <v-select
-                  v-model="form.ward"
-                  :items="[1, 2, 3]"
+                  v-model="form.address.ward"
+                  :items="defaultInfo.hanoiWards"
+                  item-text="name"
+                  item-value="id"
                   :rules="requiredField()"
                   label="Phường"
                   class="mt-6 mx-8"
                   style="width: 100%;"
                 />
                 <v-text-field
-                  v-model="form.detailAddress"
+                  v-model="form.address.road"
                   :rules="requiredField()"
                   label="Địa chỉ cụ thể"
                   placeholder="Số 1 Phạm Văn Đồng"
@@ -131,14 +137,16 @@
                 />
               </div>
               <v-text-field
-                v-model="form.addressDescription"
+                v-model="form.address.addressDetail"
                 label="Miêu tả địa chỉ"
                 placeholder="Gần trường Đại học Công nghệ"
                 class="mt-6 mx-8"
               />
               <v-select
                 v-model="form.type"
-                :items="[1, 2, 3]"
+                :items="defaultInfo.roomTypes"
+                item-text="name"
+                item-value="name"
                 :rules="requiredField()"
                 label="Loại phòng"
                 class="mt-6 mx-8"
@@ -222,6 +230,7 @@ import UploadFile from '@/components/app/UploadFile'
 import CreatePostDialog from '@/components/app/CreatePostDialog'
 import RoomPreviewTable from '@/components/app/RoomPreviewTable'
 
+import { HANOI_DISTRICTS, HANOI_WARDS, ROOM_TYPES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import validationRules from '@/helpers/validationRules'
 import { mapActions } from 'vuex'
@@ -243,11 +252,13 @@ export default {
             formValue2: false,
             formValue3: false,
             form: {
-                city: null,
-                district: null,
-                ward: null,
-                detailAddress: null,
-                addressDescription: null,
+                address: {
+                  city: null,
+                  district: null,
+                  ward: null,
+                  road: null,
+                  addressDetail: null,
+                },
                 time: null,
                 type: null,
                 rooms: [{
@@ -258,7 +269,7 @@ export default {
                     address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                     detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                     price: '1.000.000',
-                    services: [1, 2, 3],
+                    services: ["1", "2", "3"],
                     favorite: 2,
                     imgs: [ 'https://i.imgur.com/v39ykUw.jpeg' ],
                     owner: {
@@ -270,8 +281,22 @@ export default {
             postImgs: [],
             previewImgs: [],
             imgsToDelete: [],
-            postFee: null
+            postFee: null,
+            defaultInfo: {
+              hanoiDistricts: HANOI_DISTRICTS,
+              hanoiWards: HANOI_WARDS,
+              roomTypes: ROOM_TYPES
+            }
         }
+    },
+
+    watch: {
+      'form.address.district': {
+        handler() {
+          this.defaultInfo.hanoiWards = HANOI_WARDS.filter(e =>  e.district == this.form.address.district )
+        },
+        deep: true
+      }
     },
 
     mounted () {
@@ -280,7 +305,8 @@ export default {
 
     methods: {
         ...mapActions({
-            getPostFee: 'room/getPostFee'
+            getPostFee: 'room/getPostFee',
+            submitPost: 'room/submitPost'
         }),
 
         getChosenPost () {
@@ -306,6 +332,7 @@ export default {
         },
 
         onAddRoom (room) {
+          if (!this.form.rooms) this.form.rooms = []
           this.form.rooms.push(room)
         },
 
@@ -317,12 +344,31 @@ export default {
             this.imgsToDelete.push(img)
         },
 
-        onSubmitPost () {
-
+        async onSubmitPost () {
+            const data = this.form
+            data.address.district = HANOI_DISTRICTS.filter(e => e.id == data.address.district).name
+            data.address.ward = HANOI_WARDS.filter(e => e.id == data.address.ward).name
+            const handler = new ApiHandler()
+                            .setData(data)
+                            .setOnResponse(res => {
+                                this.emptyForm()
+                            })
+            await this.submitPost(handler)
         },
 
         requiredField () {
             return [validationRules.requiredField]
+        },
+
+        emptyForm () {
+          Object.keys(this.form).forEach(e => {
+            this.form[e] = null
+          })
+          this.postImgs = [],
+          this.previewImgs = [],
+          this.imgsToDelete = [],
+          this.postFee = null
+          this.step = 1
         }
     }
 }
