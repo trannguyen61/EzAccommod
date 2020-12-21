@@ -6,6 +6,7 @@
 
     <div class="post-list--content">
       <v-data-table
+        fixed-header
         :headers="headers"
         :items="rooms"
         :options.sync="options"
@@ -14,7 +15,7 @@
         multi-sort
       >
         <template #item.type="{ item }">
-          {{ defaultRoom.roomTypes.find(e => e.value == item.type).name || '' }}
+          {{ defaultRoom.roomTypes.find(e => e.id == item.type).name || '' }}
         </template>
         <template #item.checked="{ item }">
           <v-icon
@@ -34,7 +35,7 @@
           <v-switch
             :readonly="!item.checked"
             :input-value="item.active"
-            @change="onToggleActivePost"
+            @mousedown="onCheckActivePost(item)"
           />
         </template>
         <template #item.edit="{ item }">
@@ -94,12 +95,19 @@
       ref="edit-post-dialog"
       :post="chosenPost"
     />
+    <confirm-dialog
+      ref="confirm-dialog"
+      :title="'Thông báo'"
+      :text="'Bài đăng cần tối thiểu 1 ảnh khái quát nhà và tối thiểu 3 ảnh cho mỗi loại phòng. Hãy cập nhật để bắt đầu cho thuê.'"
+      @confirm="onClickEditBtn"
+    />
   </div>
 </template>
 
 <script>
 import ProlongTimeDialog from '@/components/app/ProlongTimeDialog'
 import EditPostDialog from '@/components/app/EditPostDialog'
+import ConfirmDialog from '@/components/ConfirmDialog'
 
 import { ROOM_TYPES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
@@ -107,7 +115,7 @@ import { mapActions } from 'vuex'
 
 export default {
 
-    components: { ProlongTimeDialog, EditPostDialog },
+    components: { ProlongTimeDialog, EditPostDialog, ConfirmDialog },
     layout: 'app',
 
     data () {
@@ -116,7 +124,7 @@ export default {
                 id: '123',
                 type: 1,
                 roomNum: 2,
-                square: 30,
+                area: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                 detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
@@ -131,7 +139,7 @@ export default {
                 id: '124',
                 type: 3,
                 roomNum: 2,
-                square: 30,
+                area: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                 detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',
@@ -139,7 +147,7 @@ export default {
                 favorite: 6,
                 views: 65,
                 checked: false,
-                active: false,
+                active: true,
                 fee: '1.000.000'
             }],
             chosenPost: null,
@@ -180,14 +188,27 @@ export default {
           toggleActivePost: 'room/toggleActivePost'
         }),
 
-        async onToggleActivePost (value) {
-          const data = { active: value }
-          const handler = new ApiHandler().setData(data)
+        onCheckActivePost (item) {
+          this.chosenPost = item
+          if (!item.active && (!item.images || !item.images.length)) {
+            this.$refs['confirm-dialog'].open()
+          } else {
+            this.onToggleActivePost()
+          }
+        },
+
+        async onToggleActivePost () {
+          const item = this.chosenPost
+          const data = { id: item.id, active: !item.active }
+          const handler = new ApiHandler().setData(data).setOnResponse(() => {
+            this.chosenPost.active = !item.active
+          })
           await this.toggleActivePost(handler)
         },
 
         onClickEditBtn (item) {
-          this.chosenPost = item
+          console.log(item)
+          if (item) this.chosenPost = item
           this.$refs['edit-post-dialog'].open()
         },
 

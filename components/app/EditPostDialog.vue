@@ -33,13 +33,13 @@
 </template>
 
 <script>
-import CreatePostStepper from '@/components/app/CreatePostStepper'
+// import CreatePostStepper from '@/components/app/CreatePostStepper'
 
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
 export default {
-    components: { CreatePostStepper },
+    // components: { CreatePostStepper },
 
     props: {
         post: {

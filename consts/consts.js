@@ -3,25 +3,28 @@
 */
 export const DAY_OF_MONTH = Array.from({length: 31}, (v, k) => k+1)
 export const HOUR_OF_DAY = Array.from({length: 25}, (v, k) => ({ hour: k, name: `${k} giờ` }))
+export const CITIES = [ 
+    { id: "1", name: 'Hà Nội' }
+]
 export const HANOI_DISTRICTS = [
-    { id: 1, name: "Hoàn Kiếm"}, 
-    { id: 2, name: "Đống Đa" }, 
-    { id: 3, name: "Ba Đình" }, 
-    { id: 4, name: "Hai Bà Trưng" }, 
-    { id: 5, name: "Hoàng Mai" }, 
-    { id: 6, name: "Thanh Xuân"}, 
-    { id: 7, name: "Long Biên"}, 
-    { id: 8, name: "Nam Từ Liêm"}, 
-    { id: 9, name: "Bắc Từ Liêm"}, 
-    { id: 10, name: "Tây Hồ"}, 
-    { id: 11, name: "Cầu Giấy"}, 
-    { id: 12, name: "Hà Đông"}
+    { id: "1", name: "Hoàn Kiếm"}, 
+    { id: "2", name: "Đống Đa" }, 
+    { id: "3", name: "Ba Đình" }, 
+    { id: "4", name: "Hai Bà Trưng" }, 
+    { id: "5", name: "Hoàng Mai" }, 
+    { id: "6", name: "Thanh Xuân"}, 
+    { id: "7", name: "Long Biên"}, 
+    { id: "8", name: "Nam Từ Liêm"}, 
+    { id: "9", name: "Bắc Từ Liêm"}, 
+    { id: "10", name: "Tây Hồ"}, 
+    { id: "11", name: "Cầu Giấy"}, 
+    { id: "12", name: "Hà Đông"}
 ]
 export const HANOI_WARDS = [
-    { id: 1, district: 1, name: "Chương Dương" },
-    { id: 2, district: 1, name: "Cửa Đông" },
-    { id: 3, district: 1, name: "Cửa Nam" },
-    { id: 4, district: 1, name: "Đồng Xuân" },
+    { id: "1", district: "1", name: "Chương Dương" },
+    { id: "2", district: "1", name: "Cửa Đông" },
+    { id: "3", district: "1", name: "Cửa Nam" },
+    { id: "4", district: "1", name: "Đồng Xuân" },
     { id: 5, district: 1, name: "Hàng Bạc" },
     { id: 6, district: 1, name: "Hàng Bài" },
     { id: 7, district: 1, name: "Hàng Bồ" },
@@ -123,32 +126,33 @@ export const HANOI_WARDS = [
 */
 export const ROOM_PRICE_RANGE = [ 500, 4500 ]
 export const ROOM_TYPES = [
-    { name: 'Phòng trọ', value: 1}, 
-    { name: 'Chung cư mini', value: 2},
-    { name: 'Nhà nguyên căn', value: 3}, 
-    { name: 'Chung cư nguyên căn', value: 4} 
+    { name: 'Phòng trọ', id: "1"}, 
+    { name: 'Chung cư mini', id: "2"},
+    { name: 'Nhà nguyên căn', id: "3"}, 
+    { name: 'Chung cư nguyên căn', id: "4"} 
 ]
 export const ROOM_SQUARE_RANGE = [ 10, 100 ]
 export const ROOM_FACILITIES = [ 
-    { name: 'Phòng tắm khép kín', value: 1}, 
-    { name: 'Có nóng lạnh', value: 2}, 
-    { name: 'Khu bếp riêng', value: 3 }, 
-    { name: 'Khu bếp chung', value: 4 }, 
-    { name: 'Có điều hòa', value: 5}, 
-    { name: 'Có ban công', value: 6 }, 
-    { name: 'Điện nước giá dân', value: 7 }, 
-    { name: 'Có tủ lạnh', value: 8 }, 
-    { name: 'Có máy giặt', value: 9 }, 
-    { name: 'Có giường tủ', value: 10 },
-    { name: 'Chung chủ', value: 11},
-    { name: 'Không chung chủ', value: 12},  
-    { name: 'Phòng tắm chung', value: 13}, 
-    { name: 'Điện nước giá thuê', value: 14 }, 
+    { name: 'Phòng tắm khép kín', value: "1"}, 
+    { name: 'Có nóng lạnh', value: "2"}, 
+    { name: 'Khu bếp riêng', value: "3" }, 
+    { name: 'Khu bếp chung', value: "4" }, 
+    { name: 'Có điều hòa', value: "5"}, 
+    { name: 'Có ban công', value: "6" }, 
+    { name: 'Điện nước giá dân', value: "7" }, 
+    { name: 'Có tủ lạnh', value: "8" }, 
+    { name: 'Có máy giặt', value: "9" }, 
+    { name: 'Có giường tủ', value: "10" },
+    { name: 'Chung chủ', value: "11"},
+    { name: 'Không chung chủ', value: "12"},  
+    { name: 'Phòng tắm chung', value: "13"}, 
+    { name: 'Điện nước giá thuê', value: "14" }, 
 ]
 export const ROOM_VIOLATIONS = [
-    { id: 1, text: 'Thông tin không chính xác' },
-    { id: 2, text: 'Phòng không tồn tại' },
-    { id: 3, text: 'Chủ trọ có thái độ không đúng mực' }
+    { id: "1", text: 'Thông tin không chính xác' },
+    { id: "2", text: 'Phòng không tồn tại' },
+    { id: "3", text: 'Chủ trọ có thái độ không đúng mực' },
+    { id: "4", text: 'Khác' }
 ]
 export const SERVICE_BY_NAME = {
     "1": "bathroom",
@@ -166,3 +170,13 @@ export const SERVICE_BY_NAME = {
     "13": "bathroom",
     "14": "elecPrice"
 }
+
+export const DEFAULT_TIME_FRAME = [
+    { id: 1, name: '1 tuần', days: 7 },
+    { id: 1, name: '2 tuần', days: 14 },
+    { id: 1, name: '1 tháng', days: 30 },
+    { id: 1, name: '2 tháng', days: 60 },
+    { id: 1, name: '3 tháng', days: 90 },
+    { id: 1, name: '6 tháng', days: 180 },
+    { id: 1, name: '1 năm', days: 365 },
+]

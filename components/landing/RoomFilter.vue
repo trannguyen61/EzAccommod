@@ -102,7 +102,7 @@
             <v-select
               v-model="filter.roomTypes"
               :items="defaultRoom.roomTypes"
-              item-value="value"
+              item-value="id"
               item-text="name"
               multiple
               chips
@@ -121,11 +121,11 @@
           </div>
           <div class="item--input">
             <v-range-slider
-              v-model="filter.square"
+              v-model="filter.area"
               color="dark"
               step="10"
-              :min="defaultRoom.roomSquareRanges[0]"
-              :max="defaultRoom.roomSquareRanges[1]"
+              :min="defaultRoom.roomAreaRange[0]"
+              :max="defaultRoom.roomAreaRange[1]"
               :thumb-label="true"
               :thumb-color="'primary'"
             />
@@ -176,7 +176,7 @@ export default {
             filter: {
                 price: [500, 7000],
                 roomTypes: [],
-                square: [10, 100],
+                area: [10, 100],
                 services: [],
                 city: null,
                 district: null,
@@ -185,7 +185,7 @@ export default {
             defaultRoom: {
                 roomPriceRanges: ROOM_PRICE_RANGE,
                 roomTypes: ROOM_TYPES,
-                roomSquareRanges: ROOM_SQUARE_RANGE,
+                roomAreaRange: ROOM_SQUARE_RANGE,
                 roomFacilities: ROOM_FACILITIES
             }
         }

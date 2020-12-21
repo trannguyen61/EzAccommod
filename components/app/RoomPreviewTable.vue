@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-simple-table
+      fixed-header
       class="room-preview-table mx-8"
     >
       <template #default>
@@ -32,7 +33,7 @@
           >
             <td>{{ i + 1 }}</td>
             <td>{{ room.roomNum }}</td>
-            <td>{{ room.square }} m<sup>2</sup></td>
+            <td>{{ room.area }} m<sup>2</sup></td>
             <td>{{ room.price }} VNĐ</td>
             <td>
               <ul class="facilities ml-auto mr-auto">

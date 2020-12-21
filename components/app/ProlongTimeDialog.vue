@@ -3,20 +3,40 @@
     v-model="dialog"
     width="500"
   >
-    <v-card>
+    <v-card style="overflow: hidden;">
       <v-card-title class="headline">
         Gia hạn bài đăng sau ngày {{ dueDate }}
       </v-card-title>
 
       <div class="card-content">
-        <v-select
-          v-model="time"
-          :items="['1 tuần', '1 tháng', 'Từ giờ cho đến mãi sau này']"
-          label="Thời gian hiển thị bài đăng"
-          placeholder="6 tháng"
-          class="mt-6 mx-8"
-          @change="onGetPostFee"
-        />
+        <v-row>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-select
+              v-model="time"
+              :items="defaultInfo.defaultTimeFrame"
+              item-text="name"
+              item-value="days"
+              label="Thời gian hiển thị bài đăng"
+              placeholder="6 tháng"
+              class="ml-8 mr-4"
+              @change="onGetPostFee"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <v-text-field
+              :value="expiredAt"
+              readonly
+              label="Ngày hết hạn"
+              class="mr-8 ml-4"
+            />
+          </v-col>
+        </v-row>
 
         <v-text-field
           :value="postFee"
@@ -50,6 +70,8 @@
 </template>
 
 <script>
+import { DEFAULT_TIME_FRAME } from '@/consts/consts'
+import { addDays } from '@/helpers/dateHelper'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
@@ -65,13 +87,28 @@ export default {
         return {
             dialog: false,
             time: null,
-            postFee: null
+            postFee: null,
+            expiredAt: null,
+            defaultInfo: {
+              defaultTimeFrame: DEFAULT_TIME_FRAME
+            }
         }
     },
 
     computed: {
       dueDate () {
         return this.post ? this.post.dueDate : ''
+      }
+    },
+
+    watch: {
+      time () {
+          if (!this.post) return
+
+          const now = new Date(this.post.expiredAt)
+          const expiredAt = addDays(now, this.timeFrame).toISOString()
+
+          this.expiredAt = expiredAt
       }
     },
 

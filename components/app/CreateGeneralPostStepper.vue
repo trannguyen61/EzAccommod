@@ -1,13 +1,14 @@
 <template>
   <v-stepper
     v-model="step"
+    class="create-general-post-stepper"
   >
     <v-stepper-header>
       <v-stepper-step
         :complete="step > 1"
         step="1"
       >
-        Thông tin cơ bản
+        Thông tin thanh toán
       </v-stepper-step>
 
       <v-divider />
@@ -16,93 +17,125 @@
         :complete="step > 2"
         step="2"
       >
-        Thông tin chi tiết
+        Thông tin cơ bản
       </v-stepper-step>
 
       <v-divider />
 
       <v-stepper-step
+        :complete="step > 3"
         step="3"
       >
-        Thêm phòng
+        Cấu hình dịch vụ
+      </v-stepper-step>
+
+      <v-divider />
+
+      <v-stepper-step
+        :complete="step > 4"
+        step="4"
+      >
+        Thông tin chi tiết
       </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-form v-model="formValue1">
-          <div class="d-flex">
-            <v-text-field
-              :value="'Nakayama Haruki'"
-              readonly
-              label="Họ tên chủ trọ"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-            <v-text-field
-              :value="'113'"
-              readonly
-              label="Số điện thoại liên lạc"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-          </div>
+        <v-row>
+          <v-col
+            v-if="$vuetify.breakpoint.mdAndUp"
+            md="5"
+          >
+            <img
+              :src="require('@/assets/images/app/6143.jpg')"
+              alt=""
+              class="demo-ilust"
+            >
+          </v-col>
 
-          <div class="d-flex">
-            <v-select
-              v-model="form.time"
-              :rules="requiredField()"
-              :items="['1 tuần', '1 tháng', 'Từ giờ cho đến mãi sau này']"
-              label="Thời gian hiển thị bài đăng"
-              placeholder="6 tháng"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-              @change="onGetPostFee"
-            />
+          <v-col
+            cols="12"
+            md="7"
+          >
+            <v-form
+              v-model="formValue1"
+              class="owner-config"
+            >
+              <div class="d-flex">
+                <v-text-field
+                  :value="'Nakayama Haruki'"
+                  readonly
+                  label="Họ tên chủ trọ"
+                  class="stepper-input"
+                  style="width: 100%;"
+                />
+                <v-text-field
+                  :value="'113'"
+                  readonly
+                  label="Số điện thoại liên lạc"
+                  class="stepper-input"
+                  style="width: 100%;"
+                />
+              </div>
 
-            <v-text-field
-              :value="postFee"
-              readonly
-              label="Phí hiển thị bài đăng"
-              class="mt-6 mx-8"
-              style="width: 100%;"
-            />
-          </div>
-        </v-form>
+              <div class="d-flex">
+                <v-select
+                  v-model="timeFrame"
+                  :rules="requiredField()"
+                  :items="defaultInfo.defaultTimeFrame"
+                  item-text="name"
+                  item-value="days"
+                  label="Thời gian hiển thị bài đăng"
+                  placeholder="6 tháng"
+                  hint="Trường bắt buộc"
+                  persistent-hint
+                  class="stepper-input"
+                  style="width: 100%;"
+                  @change="onGetPostFee"
+                />
+
+                <v-text-field
+                  :value="postFee"
+                  readonly
+                  label="Phí hiển thị bài đăng"
+                  class="stepper-input"
+                  style="width: 100%;"
+                />
+              </div>
+            </v-form>
+          </v-col>
+        </v-row>
+
 
         <button
           v-ripple
           type="button"
           :disabled="!formValue1"
-          class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
+          class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
           @click="step = 2"
         >
           Tiếp tục
-        </button>
-
-        <button
-          v-ripple
-          type="button"
-          class="custom-btn custom-btn--text"
-          @click="step -= 1"
-        >
-          Lùi về
         </button>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <v-form v-model="formValue2">
           <v-row>
-            <v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
               <div class="d-flex">
                 <v-select
                   v-model="form.address.city"
-                  :items="['Hà Nội']"
+                  :items="defaultInfo.cities"
                   item-text="name"
                   item-value="id"
                   :rules="requiredField()"
+                  hint="Trường bắt buộc"
+                  persistent-hint
                   label="Tỉnh/Thành phố"
-                  class="mt-6 mx-8"
+                  class="stepper-input"
                   style="width: 100%;"
                 />
                 <v-select
@@ -111,8 +144,10 @@
                   item-text="name"
                   item-value="id"
                   :rules="requiredField()"
+                  hint="Trường bắt buộc"
+                  persistent-hint
                   label="Quận/Huyện/Thị xã"
-                  class="mt-6 mx-8"
+                  class="stepper-input"
                   style="width: 100%;"
                 />
               </div>
@@ -123,16 +158,20 @@
                   item-text="name"
                   item-value="id"
                   :rules="requiredField()"
+                  hint="Trường bắt buộc"
+                  persistent-hint
                   label="Phường"
-                  class="mt-6 mx-8"
+                  class="stepper-input"
                   style="width: 100%;"
                 />
                 <v-text-field
                   v-model="form.address.road"
                   :rules="requiredField()"
+                  hint="Trường bắt buộc"
+                  persistent-hint
                   label="Địa chỉ cụ thể"
                   placeholder="Số 1 Phạm Văn Đồng"
-                  class="mt-6 mx-8"
+                  class="stepper-input"
                   style="width: 100%;"
                 />
               </div>
@@ -140,26 +179,33 @@
                 v-model="form.address.addressDetail"
                 label="Miêu tả địa chỉ"
                 placeholder="Gần trường Đại học Công nghệ"
-                class="mt-6 mx-8"
+                class="stepper-input"
               />
               <v-select
                 v-model="form.type"
                 :items="defaultInfo.roomTypes"
                 item-text="name"
-                item-value="name"
+                item-value="id"
                 :rules="requiredField()"
+                hint="Trường bắt buộc"
+                persistent-hint
                 label="Loại phòng"
-                class="mt-6 mx-8"
+                class="stepper-input"
               />
             </v-col>
 
-            <v-col class="d-flex flex-column align-center">
+            <v-col
+              cols="12"
+              md="6"
+              class="d-flex flex-column align-center"
+            >
               <upload-file
                 :default-preview-imgs="previewImgs"
                 @upload-imgs="uploadImgs"
                 @delete-imgs="deleteImgs"
               />
-              <small>Ảnh khái quát về nhà cho thuê</small>
+              <small>Tối thiểu 3 ảnh khái quát về phòng cho thuê</small>
+              <small>(Có thể bổ sung sau khi tạo bài đăng)</small>
             </v-col>
           </v-row>
         </v-form>
@@ -168,7 +214,7 @@
           v-ripple
           type="button"
           :disabled="!formValue2"
-          class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
+          class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
           @click="step = 3"
         >
           Tiếp tục
@@ -185,23 +231,93 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <div class="post-room-list">
-          <button
-            v-ripple
-            type="button"
-            class="d-block custom-btn custom-btn--text custom-btn__densed ml-auto"
-            @click="onOpenAddRoomDialog"
-          >
-            Thêm phòng
-          </button>
+        <services-chosen @on-submit-post="onAddRoom" />
 
-          <room-preview-table :rooms="form.rooms" />
-        </div>
         <button
           v-ripple
           type="button"
-          :disabled="!formValue1"
-          class="custom-btn custom-btn--text custom-btn__densed ml-8 my-4"
+          :disabled="!room.services.length"
+          class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
+          @click="step = 4"
+        >
+          Tiếp tục
+        </button>
+
+        <button
+          v-ripple
+          type="button"
+          class="custom-btn custom-btn--text"
+          @click="step -= 1"
+        >
+          Lùi về
+        </button>
+      </v-stepper-content>
+
+      <v-stepper-content step="4">
+        <v-row>
+          <v-col
+            cols="12"
+            md="7"
+          >
+            <v-form
+              v-model="formValue3"
+              class="price-config"
+            >
+              <div class="post-room-list">              
+                <div class="d-flex">
+                  <v-text-field
+                    v-model="room.price"
+                    :rules="requiredField()"
+                    hint="Trường bắt buộc"
+                    persistent-hint
+                    label="Giá (VNĐ)"
+                    class="stepper-input"
+                    style="width: 100%;"
+                    @input="formatPrice"
+                  />
+                </div>
+                <div class="d-flex">
+                  <v-text-field
+                    v-model="room.number"
+                    :rules="requiredField()"
+                    hint="Trường bắt buộc"
+                    persistent-hint
+                    label="Số lượng phòng"
+                    type="number"
+                    class="stepper-input"
+                    style="width: 100%;"
+                  />
+                  <v-text-field
+                    v-model="room.area"
+                    :rules="requiredField()"
+                    hint="Trường bắt buộc"
+                    persistent-hint
+                    label="Diện tích (m2)"
+                    type="number"
+                    class="stepper-input"
+                    style="width: 100%;"
+                  />
+                </div>
+              </div>
+            </v-form>
+          </v-col>
+          <v-col
+            v-if="$vuetify.breakpoint.mdAndUp"
+            md="5"
+          >
+            <img
+              :src="require('@/assets/images/app/11060.jpg')"
+              alt=""
+              class="demo-ilust"
+            >
+          </v-col>
+        </v-row>
+
+        <button
+          v-ripple
+          type="button"
+          :disabled="!formValue3"
+          class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
           @click="onSubmitPost"
         >
           Hoàn tất
@@ -217,26 +333,21 @@
         </button>
       </v-stepper-content>
     </v-stepper-items>
-
-    <create-post-dialog
-      ref="create-post-dialog"
-      @add-room="onAddRoom"
-    />
   </v-stepper>
 </template>
 
 <script>
 import UploadFile from '@/components/app/UploadFile'
-import CreatePostDialog from '@/components/app/CreatePostDialog'
-import RoomPreviewTable from '@/components/app/RoomPreviewTable'
+import ServicesChosen from '@/components/app/ServicesChosen'
 
-import { HANOI_DISTRICTS, HANOI_WARDS, ROOM_TYPES } from '@/consts/consts'
+import { HANOI_DISTRICTS, HANOI_WARDS, ROOM_TYPES, DEFAULT_TIME_FRAME, CITIES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
+import { addDays } from '@/helpers/dateHelper'
 import validationRules from '@/helpers/validationRules'
 import { mapActions } from 'vuex'
 
 export default {
-    components: { UploadFile, CreatePostDialog, RoomPreviewTable },
+    components: { UploadFile, ServicesChosen },
 
     props: {
         post: {
@@ -259,25 +370,17 @@ export default {
                   road: null,
                   addressDetail: null,
                 },
-                time: null,
+                expiredAt: null,
                 type: null,
-                rooms: [{
-                    id: '123',
-                    type: 1,
-                    roomNum: 2,
-                    square: 30,
-                    address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                    detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                    price: '1.000.000',
-                    services: ["1", "2", "3"],
-                    favorite: 2,
-                    imgs: [ 'https://i.imgur.com/v39ykUw.jpeg' ],
-                    owner: {
-                        name: 'Nakayama Haruki',
-                        phone: '113'
-                    }
-                }]
+                rooms: []
             },
+            room: {
+                number: null,
+                price: null,
+                area: null,
+                services: [],
+            },
+            timeFrame: '',
             postImgs: [],
             previewImgs: [],
             imgsToDelete: [],
@@ -285,7 +388,9 @@ export default {
             defaultInfo: {
               hanoiDistricts: HANOI_DISTRICTS,
               hanoiWards: HANOI_WARDS,
-              roomTypes: ROOM_TYPES
+              roomTypes: ROOM_TYPES,
+              defaultTimeFrame: DEFAULT_TIME_FRAME,
+              cities: CITIES
             }
         }
     },
@@ -314,11 +419,11 @@ export default {
                 this.form[e] = this.post[e]
             })
             
-            if (this.form.time) this.onGetPostFee()
+            if (this.timeFrame) this.onGetPostFee()
         },
 
-        async onGetPostFee (time) {
-            const data = { time }
+        async onGetPostFee () {
+            const data = { time: this.timeFrame }
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
@@ -327,13 +432,9 @@ export default {
             await this.getPostFee(handler)
         },
 
-        onOpenAddRoomDialog () {
-          this.$refs['create-post-dialog'].open()
-        },
-
         onAddRoom (room) {
-          if (!this.form.rooms) this.form.rooms = []
-          this.form.rooms.push(room)
+          console.log(room)
+          this.room.services = room
         },
 
         uploadImgs (imgs) {
@@ -345,15 +446,28 @@ export default {
         },
 
         async onSubmitPost () {
-            const data = this.form
-            data.address.district = HANOI_DISTRICTS.filter(e => e.id == data.address.district).name
-            data.address.ward = HANOI_WARDS.filter(e => e.id == data.address.ward).name
+            const data = this.onTransformData()
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
                                 this.emptyForm()
                             })
             await this.submitPost(handler)
+        },
+
+        onTransformData () {
+          this.form.rooms.push(this.room)
+          const data = this.form
+          
+          const now = new Date()
+          const expiredAt = addDays(now, this.timeFrame)
+          data.expiredAt = expiredAt.toISOString()
+
+          return data
+        },
+
+        formatPrice () {
+            this.room.price = new Intl.NumberFormat('vi-VN').format(this.room.price.replace(/\D/g, ''))
         },
 
         requiredField () {

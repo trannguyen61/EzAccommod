@@ -84,7 +84,7 @@
             >
               <div class="detail-list-item">
                 <div class="item--title">
-                  Thông tin liên lạc
+                  Thông tin chung
                 </div>
                 <div class="item--content">
                   <div>
@@ -103,6 +103,14 @@
                       {{ room.owner.phone }}
                     </div>
                   </div>
+                  <div>
+                    <div class="item--subtitle">
+                      Kiểu phòng cho thuê:
+                    </div>
+                    <div class="item--text">
+                      {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </v-col>
@@ -114,15 +122,15 @@
             >
               <div class="detail-list-item mt-4">
                 <div class="item--title">
-                  {{ defaultRoom.roomTypes.find(e => e.value == room.type).name || '' }}
+                  Chi tiết loại phòng
                 </div>
               </div>
-              <v-simple-table>
+              <v-simple-table fixed-header>
                 <template #default>
                   <tbody>
                     <tr>
                       <td>Diện tích</td>
-                      <td>{{ room.square }} m<sup>2</sup></td>
+                      <td>{{ room.area }} m<sup>2</sup></td>
                     </tr>
 
                     <tr>
@@ -218,7 +226,7 @@ export default {
                 id: '123',
                 type: 1,
                 roomNum: 2,
-                square: 30,
+                area: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                 detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',

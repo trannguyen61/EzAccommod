@@ -13,7 +13,7 @@
         @click="$router.push(`/${room.id}`)"
       >
         <div class="title">
-          {{ defaultRoom.roomTypes.find(e => e.value == room.type).name || '' }}
+          {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
           <v-icon
             color="dark"
             class="icon"
@@ -22,7 +22,7 @@
           </v-icon>
         </div>
         <div class="subtitle-2">
-          {{ room.square }} m<sup>2</sup> - {{ room.roomNum }} phòng
+          {{ room.area }} m<sup>2</sup> - {{ room.roomNum }} phòng
         </div>
         <div class="price">
           {{ room.price }} đồng/tháng

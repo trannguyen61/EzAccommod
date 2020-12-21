@@ -45,7 +45,7 @@ export default {
                 id: '123',
                 type: 1,
                 roomNum: 2,
-                square: 30,
+                area: 30,
                 address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
                 detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
                 price: '1.000.000',

@@ -7,7 +7,7 @@
       @click="$router.push(`/${room.id}`)"
     >
       <div class="title">
-        {{ defaultRoom.roomTypes.find(e => e.value == room.type).name || '' }}
+        {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
         <v-icon
           color="dark"
           class="icon"
