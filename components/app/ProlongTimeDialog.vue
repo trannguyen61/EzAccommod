@@ -5,7 +5,7 @@
   >
     <v-card style="overflow: hidden;">
       <v-card-title class="headline">
-        Gia hạn bài đăng sau ngày {{ dueDate }}
+        Gia hạn bài đăng sau ngày {{ formattedExpiredAt }}
       </v-card-title>
 
       <div class="card-content">
@@ -15,13 +15,13 @@
             md="6"
           >
             <v-select
-              v-model="time"
+              v-model="timeFrame"
               :items="defaultInfo.defaultTimeFrame"
               item-text="name"
               item-value="days"
               label="Thời gian hiển thị bài đăng"
               placeholder="6 tháng"
-              class="ml-8 mr-4"
+              class="mx-8"
               @change="onGetPostFee"
             />
           </v-col>
@@ -30,10 +30,10 @@
             md="6"
           >
             <v-text-field
-              :value="expiredAt"
+              :value="formattedNewExpiredAt"
               readonly
               label="Ngày hết hạn"
-              class="mr-8 ml-4"
+              class="mx-8"
             />
           </v-col>
         </v-row>
@@ -42,7 +42,7 @@
           :value="postFee"
           readonly
           label="Phí hiển thị bài đăng (bổ sung)"
-          class="mt-6 mx-8"
+          class="mx-8"
         />
       </div>
       <v-divider />
@@ -58,7 +58,7 @@
         </button>
         <button
           v-ripple
-          :disabled="!time || !postFee"
+          :disabled="!timeFrame || !postFee"
           class="custom-btn custom-btn--text custom-btn__densed"
           @click="onProlongTimePost"
         >
@@ -71,7 +71,7 @@
 
 <script>
 import { DEFAULT_TIME_FRAME } from '@/consts/consts'
-import { addDays } from '@/helpers/dateHelper'
+import { addDays, formatISOdate } from '@/helpers/dateHelper'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
@@ -86,7 +86,7 @@ export default {
     data () {
         return {
             dialog: false,
-            time: null,
+            timeFrame: null,
             postFee: null,
             expiredAt: null,
             defaultInfo: {
@@ -96,19 +96,23 @@ export default {
     },
 
     computed: {
-      dueDate () {
-        return this.post ? this.post.dueDate : ''
+      formattedExpiredAt () {
+        return this.post && this.post.expiredAt ? formatISOdate(this.post.expiredAt) : ''
+      },
+
+      formattedNewExpiredAt () {
+        return this.expiredAt ? formatISOdate(this.expiredAt.split("T")[0]) : ''
       }
     },
 
     watch: {
-      time () {
-          if (!this.post) return
+      timeFrame () {
+          if (!this.post || !this.post.expiredAt) return
 
           const now = new Date(this.post.expiredAt)
           const expiredAt = addDays(now, this.timeFrame).toISOString()
 
-          this.expiredAt = expiredAt
+          this.expiredAt =  expiredAt.split("T")[0]
       }
     },
 
@@ -119,7 +123,7 @@ export default {
         }),
 
         async onGetPostFee () {
-            const data = { time: this.time }
+            const data = { time: this.timeFrame }
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
@@ -129,7 +133,7 @@ export default {
         },
 
         async onProlongTimePost () {
-            const data = { time: this.time }
+            const data = { time: this.timeFrame }
             const handler = new ApiHandler()
                             .setData(data)
             await this.getPostFee(handler)

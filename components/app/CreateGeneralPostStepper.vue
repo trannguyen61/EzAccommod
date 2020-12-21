@@ -78,20 +78,27 @@
                 />
               </div>
 
+              <v-select
+                v-model="timeFrame"
+                :rules="requiredField()"
+                :items="defaultInfo.defaultTimeFrame"
+                item-text="name"
+                item-value="days"
+                label="Thời gian hiển thị bài đăng"
+                placeholder="6 tháng"
+                hint="Trường bắt buộc"
+                persistent-hint
+                class="stepper-input"
+                @change="onGetPostFee"
+              />
+
               <div class="d-flex">
-                <v-select
-                  v-model="timeFrame"
-                  :rules="requiredField()"
-                  :items="defaultInfo.defaultTimeFrame"
-                  item-text="name"
-                  item-value="days"
-                  label="Thời gian hiển thị bài đăng"
-                  placeholder="6 tháng"
-                  hint="Trường bắt buộc"
-                  persistent-hint
+                <v-text-field
+                  :value="expiredAt"
+                  readonly
+                  label="Ngày hết hạn"
                   class="stepper-input"
                   style="width: 100%;"
-                  @change="onGetPostFee"
                 />
 
                 <v-text-field
@@ -231,7 +238,10 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <services-chosen @on-submit-post="onAddRoom" />
+        <services-chosen 
+          :default-services="room.services"
+          @on-submit-post="onAddRoom"
+        />
 
         <button
           v-ripple
@@ -342,7 +352,7 @@ import ServicesChosen from '@/components/app/ServicesChosen'
 
 import { HANOI_DISTRICTS, HANOI_WARDS, ROOM_TYPES, DEFAULT_TIME_FRAME, CITIES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
-import { addDays } from '@/helpers/dateHelper'
+import { addDays, formatISOdate } from '@/helpers/dateHelper'
 import validationRules from '@/helpers/validationRules'
 import { mapActions } from 'vuex'
 
@@ -380,7 +390,8 @@ export default {
                 area: null,
                 services: [],
             },
-            timeFrame: '',
+            expiredAt: null,
+            timeFrame: null,
             postImgs: [],
             previewImgs: [],
             imgsToDelete: [],
@@ -395,12 +406,24 @@ export default {
         }
     },
 
+    computed: {
+      hasExistedPost () {
+        return this.post && !!Object.keys(this.post).length
+      }
+    },
+
     watch: {
       'form.address.district': {
         handler() {
           this.defaultInfo.hanoiWards = HANOI_WARDS.filter(e =>  e.district == this.form.address.district )
         },
         deep: true
+      },
+
+      timeFrame () {
+          const now = new Date()
+          const expiredAt = addDays(now, this.timeFrame).toISOString()
+          this.expiredAt = formatISOdate(expiredAt.split("T")[0])
       }
     },
 
@@ -415,11 +438,17 @@ export default {
         }),
 
         getChosenPost () {
-            Object.keys(this.post).forEach(e => {
-                this.form[e] = this.post[e]
-            })
+            if (!this.hasExistedPost) return
+
+            const vm = this
             
-            if (this.timeFrame) this.onGetPostFee()
+            Object.keys(this.post).forEach(e => {
+                vm.form[e] = vm.post[e]
+
+                if (e == 'rooms') {
+                  vm.room = vm.post.rooms[0]
+                }
+            })
         },
 
         async onGetPostFee () {
@@ -433,7 +462,6 @@ export default {
         },
 
         onAddRoom (room) {
-          console.log(room)
           this.room.services = room
         },
 
@@ -445,7 +473,16 @@ export default {
             this.imgsToDelete.push(img)
         },
 
-        async onSubmitPost () {
+        onSubmitPost () {
+          if (this.hasExistedPost){
+            const data = this.onTransformData()
+            this.$emit('on-submit-post', data)
+          } else {
+            this.onCreatePost()
+          }
+        },
+
+        async onCreatePost () {
             const data = this.onTransformData()
             const handler = new ApiHandler()
                             .setData(data)
@@ -456,12 +493,12 @@ export default {
         },
 
         onTransformData () {
-          this.form.rooms.push(this.room)
+          this.form.rooms = [this.room]
           const data = this.form
           
           const now = new Date()
-          const expiredAt = addDays(now, this.timeFrame)
-          data.expiredAt = expiredAt.toISOString()
+          const expiredAt = addDays(now, this.timeFrame).toISOString()
+          data.expiredAt = expiredAt.split("T")[0]
 
           return data
         },
@@ -478,6 +515,10 @@ export default {
           Object.keys(this.form).forEach(e => {
             this.form[e] = null
           })
+          Object.keys(this.room).forEach(e => {
+            this.room[e] = null
+          })
+          this.timeFrame = null
           this.postImgs = [],
           this.previewImgs = [],
           this.imgsToDelete = [],

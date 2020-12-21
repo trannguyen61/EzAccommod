@@ -31,6 +31,9 @@
             far fa-circle
           </v-icon>
         </template>
+        <template #item.expiredAt="{ item }">
+          {{ onFormatISOdate(item.expiredAt) }}
+        </template>
         <template #item.active="{ item }">
           <v-switch
             :readonly="!item.checked"
@@ -109,6 +112,7 @@ import ProlongTimeDialog from '@/components/app/ProlongTimeDialog'
 import EditPostDialog from '@/components/app/EditPostDialog'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
+import { formatISOdate } from '@/helpers/dateHelper'
 import { ROOM_TYPES } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
@@ -122,28 +126,47 @@ export default {
         return {
             rooms: [{
                 id: '123',
-                type: 1,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3],
+                type: "1",
+                address: {
+                  city: "1",
+                  district: "1",
+                  ward: "1",
+                  road: "1",
+                  addressDetail: "abc",
+                },
+                rooms: [
+                  { 
+                    price: '1.000.000',
+                    services: ["1", "2", "3"],
+                    roomNum: 2,
+                    area: 30,
+                  }
+                ],
                 favorite: 10,
                 views: 100,
                 checked: true,
                 active: false,
-                dueDate: '06/01/2021',
+                expiredAt: '2021-01-06',
                 fee: '1.500.000'
             }, {
                 id: '124',
-                type: 3,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3],
+                type: "3",
+                address: {
+                  city: "1",
+                  district: "1",
+                  ward: "1",
+                  road: "1",
+                  addressDetail: "abc",
+                },
+                rooms: [
+                  { 
+                    price: '1.000.000',
+                    services: ["1", "2", "3", "4"],
+                    roomNum: 2,
+                    area: 30,
+                  }
+                ],
+                expiredAt: '2021-01-06',
                 favorite: 6,
                 views: 65,
                 checked: false,
@@ -160,7 +183,7 @@ export default {
               { text: "Yêu thích", value: "favorite" },
               { text: "Trạng thái duyệt", value: "checked" },
               { text: "Phí bài đăng", value: "fee" },
-              { text: "Ngày hết hạn", value: "dueDate" },
+              { text: "Ngày hết hạn", value: "expiredAt" },
               { text: "Trạng thái cho thuê", value: "active"},
               { text: "Chỉnh sửa", value: "edit", sortable: false},
               { text: "Gia hạn bài đăng", value: "prolong", sortable: false},
@@ -188,6 +211,10 @@ export default {
           toggleActivePost: 'room/toggleActivePost'
         }),
 
+        onFormatISOdate (date) {
+          return formatISOdate(date)
+        },
+
         onCheckActivePost (item) {
           this.chosenPost = item
           if (!item.active && (!item.images || !item.images.length)) {
@@ -207,7 +234,6 @@ export default {
         },
 
         onClickEditBtn (item) {
-          console.log(item)
           if (item) this.chosenPost = item
           this.$refs['edit-post-dialog'].open()
         },

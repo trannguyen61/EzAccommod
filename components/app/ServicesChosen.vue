@@ -180,8 +180,8 @@ import validationRules from '@/helpers/validationRules'
 export default {
     props: {
         defaultServices: {
-            type: Object,
-            default: () => ({})
+            type: Array,
+            default: () => ([])
         }
     },
 
@@ -205,9 +205,26 @@ export default {
         }
     },
 
+    computed: {
+      hasCompletedForm () {
+        return Object.keys(this.services).reduce((acc, key) => {
+          return key == 'other' ? acc : ( acc && this.services[key] )
+        }, true)
+      }
+    },
+
     watch: {
       formValue (value) {
-        if (value) this.onSubmitPost()
+        if (value && this.hasCompletedForm) this.onSubmitPost()
+      },
+
+      defaultServices: {
+        handler (value) {
+          if (value) {
+            this.getChosenServices()
+          }
+        },
+        deep: true
       }
     },
 
@@ -219,6 +236,7 @@ export default {
         getChosenServices () {
             if (!this.defaultServices) return
 
+            this.form.services = this.defaultServices
             this.convertArrayToServices()
         },
 
@@ -237,8 +255,9 @@ export default {
         },
 
         convertArrayToServices () {
-          this.form.services.forEach(e => {
+          this.defaultServices.forEach(e => {
             const serviceName = this.serviceByName[e]
+
             if (serviceName == 'other') {
               if (!this.services.other) this.services.other = []
               this.services[serviceName].push(e)
