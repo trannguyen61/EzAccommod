@@ -4,6 +4,7 @@
     <main>
       <room-filter @filtered="getFilter" />
       <div
+        v-if="!loading"
         id="rooms"
         class="room-list"
       >
@@ -13,6 +14,7 @@
           :room="room"
         />
         <button
+          v-if="rooms.length"
           v-ripple
           class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
           @click="onLoadMoreRooms"
@@ -20,7 +22,22 @@
           Xem thêm<br>
           <v-icon>fas fa-chevron-down</v-icon>
         </button>
+        <button
+          v-else
+          v-ripple
+          class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
+          @click="onGetRoomList"
+        >
+          Không có dữ liệu <br>
+          Tải lại
+        </button>
       </div>
+      <v-skeleton-loader
+        v-else
+        class="mx-8"
+        width="100%"
+        type="card-avatar, article, actions"
+      />
     </main>
   </div>
 </template>
@@ -39,7 +56,8 @@ export default {
     data () {
       return {
         rooms: [],
-        roomPagination: 1
+        roomPagination: 1,
+        loading: false
       }
     },
 
@@ -53,7 +71,12 @@ export default {
       }),
 
       async onGetRoomList () {
-        const handler = new ApiHandler().setOnResponse(res => this.rooms = res.posts)
+        this.loading = true
+        const handler = new ApiHandler()
+                      .setOnResponse(res => this.rooms = res.posts)
+                      .setOnFinally(() => {
+                        this.loading = false
+                      })
         await this.getRoomList(handler)
       },
 

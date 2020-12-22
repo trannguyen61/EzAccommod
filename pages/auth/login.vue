@@ -45,11 +45,16 @@
             <button
               v-ripple
               type="submit"
-              :disabled="!formValue"
+              :disabled="!formValue || loading"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
             >
               Đăng nhập
             </button>
+            <v-progress-linear
+              v-if="loading"
+              indeterminate
+              color="primary"
+            />
 
             <v-divider class="my-6" />
 
@@ -82,11 +87,16 @@
             <button
               v-ripple
               type="submit"
-              :disabled="!formValue"
+              :disabled="!formValue || loading"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
             >
               Đăng nhập
             </button>
+            <v-progress-linear
+              v-if="loading"
+              indeterminate
+              color="primary"
+            />
           </v-form>
         </v-tab-item>
       </v-tabs-items>
@@ -107,6 +117,7 @@ export default {
     data () {
         return {
             tab: null,
+            loading: false,
             showPassword: false,
             formValue: false,
             form: {
@@ -122,11 +133,15 @@ export default {
         }),
 
         async onLogin () {
+          this.loading = true
           const data = this.form
           const handler = new ApiHandler()
                         .setData(data)
                         .setOnResponse(() => {
                           this.$router.push('/')
+                        })
+                        .setOnFinally(() => {
+                          this.loading = false
                         })
           await this.login(handler)
         },

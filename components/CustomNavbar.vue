@@ -177,8 +177,7 @@
 </template>
 
 <script>
-import ApiHandler from '@/helpers/ApiHandler'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -202,6 +201,10 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      logout: 'user/logout'
+    }),
+    
     async onLogout () {
       this.logout()
       this.$router.push('/')

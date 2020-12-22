@@ -91,6 +91,11 @@
                 class="stepper-input"
                 @change="onGetPostFee"
               />
+              <v-progress-linear
+                v-if="getFeeLoading"
+                indeterminate
+                color="primary"
+              />
 
               <div class="d-flex">
                 <v-text-field
@@ -332,6 +337,11 @@
         >
           Hoàn tất
         </button>
+        <v-progress-linear
+          v-if="loading"
+          indeterminate
+          color="primary"
+        />
 
         <button
           v-ripple
@@ -368,6 +378,8 @@ export default {
 
     data () {
         return {
+            loading: false,
+            getFeeLoading: false,
             step: 1,
             formValue1: false,
             formValue2: false,
@@ -457,11 +469,15 @@ export default {
         },
 
         async onGetPostFee () {
+            this.getFeeLoading = true
             const data = { time: this.timeFrame }
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
                                 this.postFee = res
+                            })
+                            .setOnFinally(() => {
+                              this.getFeeLoading = false
                             })
             await this.getPostFee(handler)
         },
@@ -488,11 +504,16 @@ export default {
         },
 
         async onCreatePost () {
+            this.loading = true 
+
             const data = this.onTransformData()
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
                                 this.$router.push('/app/post-list')
+                            })
+                            .setOnFinally(() => {
+                              this.loading = false
                             })
             await this.submitPost(handler)
         },

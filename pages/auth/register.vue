@@ -68,11 +68,16 @@
             <button
               v-ripple
               type="submit"
-              :disabled="!formValueRenter || tab == 1"
+              :disabled="!formValueRenter || tab == 1 || loading"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
             >
               Hoàn tất đăng ký
             </button>
+            <v-progress-linear
+              v-if="loading"
+              indeterminate
+              color="primary"
+            />
 
             <v-divider class="my-6" />
 
@@ -163,11 +168,16 @@
             <button
               v-ripple
               type="submit"
-              :disabled="!formValueOwner || !tab"
+              :disabled="!formValueOwner || !tab || loading"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-3"
             >
               Hoàn tất đăng ký
             </button>
+            <v-progress-linear
+              v-if="loading"
+              indeterminate
+              color="primary"
+            />
 
             <button
               v-ripple
@@ -197,6 +207,7 @@ export default {
     data () {
         return {
             tab: null,
+            loading: false,
             formValueRenter: false,
             formValueOwner: false,
             showPassword: false,
@@ -220,11 +231,15 @@ export default {
         async onSignup (role) {
           if ((role == 'renter' && this.tab) || (role == 'owner' && !this.tab)) return
           
+          this.loading = true
           const data = Object.assign({}, this.form, { role })
           const handler = new ApiHandler()
                         .setData(data)
                         .setOnResponse(res => {
                           this.$router.push('/')
+                        })
+                        .setOnFinally(() => {
+                          this.loading = false
                         })
           await this.signup(handler)
         },
