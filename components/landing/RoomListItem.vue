@@ -10,9 +10,9 @@
     <div class="content">
       <div
         class="title-group"
-        @click="$router.push(`/${room.id}`)"
+        @click="$router.push(`/${room._id}`)"
       >
-        <div class="title">
+        <div class="content-title">
           {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
           <v-icon
             color="dark"
@@ -22,27 +22,58 @@
           </v-icon>
         </div>
         <div class="subtitle-2">
-          {{ room.area }} m<sup>2</sup> - {{ room.roomNum }} phòng
+          {{ room.detailedAddress }} <br>
+          {{ roomFullAddress }}
         </div>
         <div class="price">
-          {{ room.price }} đồng/tháng
+          {{ room.rooms[0].price }} đồng/tháng
         </div>
       </div>
       <v-divider class="my-3" />
-      <div class="text">
-        <div class="detail">
-          {{ room.address }} <br>
-          {{ room.detailedAddress }}
-        </div>
-        <ul class="facilities ml-auto mr-auto">
-          <li
-            v-for="fac in room.services"
-            :key="fac"
-          >
-            {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
-          </li>
-        </ul>
-      </div>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+          class="px-0 py-0"
+        >
+          <ul class="facilities ml-auto mr-auto">
+            <li
+              v-for="fac in room.rooms[0].services.slice(0, 2)"
+              :key="fac"
+            >
+              {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
+            </li>
+          </ul>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          class="px-0 py-0"
+        >
+          <ul class="facilities ml-auto mr-auto">
+            <li
+              v-for="fac in room.rooms[0].services.slice(2, 4)"
+              :key="fac"
+            >
+              {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
+            </li>
+          </ul>
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          class="px-0 py-0"
+        >
+          <ul class="facilities ml-auto mr-auto">
+            <li
+              v-for="fac in room.rooms[0].services.slice(4)"
+              :key="fac"
+            >
+              {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
+            </li>
+          </ul>
+        </v-col>
+      </v-row>
       <v-btn
         icon
         class="favorite"
@@ -66,7 +97,7 @@
 </template>
 
 <script>
-import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
+import { ROOM_TYPES, ROOM_FACILITIES, CITIES, HANOI_DISTRICTS, HANOI_WARDS } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
@@ -82,9 +113,27 @@ export default {
         return {
             defaultRoom: {
                 roomTypes: ROOM_TYPES,
-                roomFacilities: ROOM_FACILITIES
+                roomFacilities: ROOM_FACILITIES,
+                cities: CITIES,
+                hanoiDistricts: HANOI_DISTRICTS,
+                hanoiWards: HANOI_WARDS
             }
         }
+    },
+
+    computed: {
+      roomFullAddress () {
+        const findCity = this.defaultRoom.cities.find(e => e.id == this.room.address.city)
+        const findDistrict = this.defaultRoom.hanoiDistricts.find(e => e.id == this.room.address.district)
+        const findWard = this.defaultRoom.hanoiWards.find(e => e.id == this.room.address.ward)
+
+        const city = findCity ? findCity.name : ''
+        const district = findDistrict ? findDistrict.name : ''
+        const ward = findWard ? findWard.name : ''
+        const road = this.room.address.road
+
+        return `${road}, ${ward}, ${district}, ${city}`
+      }
     },
 
     methods: {

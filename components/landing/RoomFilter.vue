@@ -152,16 +152,16 @@
             />
           </div>
         </div>
+
+        <button
+          v-ripple
+          class="custom-btn custom-btn--text custom-btn__densed mt-4"
+          @click="onFilterRoom"
+        >
+          Tìm kiếm
+        </button>
       </div>
     </transition>
-
-    <button
-      v-ripple
-      class="custom-btn custom-btn--text custom-btn__densed mt-4"
-      @click="onFilterRoom"
-    >
-      Tìm kiếm
-    </button>
   </div>
 </template>
 

@@ -68,7 +68,7 @@
             <button
               v-ripple
               type="submit"
-              :disabled="!formValueRenter || tab"
+              :disabled="!formValueRenter || tab == 1"
               class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
             >
               Hoàn tất đăng ký

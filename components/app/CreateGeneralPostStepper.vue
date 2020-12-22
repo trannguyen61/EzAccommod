@@ -63,14 +63,14 @@
             >
               <div class="d-flex">
                 <v-text-field
-                  :value="'Nakayama Haruki'"
+                  :value="userName"
                   readonly
                   label="Họ tên chủ trọ"
                   class="stepper-input"
                   style="width: 100%;"
                 />
                 <v-text-field
-                  :value="'113'"
+                  :value="user.phoneNumber"
                   readonly
                   label="Số điện thoại liên lạc"
                   class="stepper-input"
@@ -354,7 +354,7 @@ import { HANOI_DISTRICTS, HANOI_WARDS, ROOM_TYPES, DEFAULT_TIME_FRAME, CITIES } 
 import ApiHandler from '@/helpers/ApiHandler'
 import { addDays, formatISOdate } from '@/helpers/dateHelper'
 import validationRules from '@/helpers/validationRules'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     components: { UploadFile, ServicesChosen },
@@ -407,6 +407,11 @@ export default {
     },
 
     computed: {
+      ...mapGetters({
+        userName: 'user/userName',
+        user: 'user/user'
+      }),
+
       hasExistedPost () {
         return this.post && !!Object.keys(this.post).length
       }
@@ -487,7 +492,7 @@ export default {
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
-                                this.emptyForm()
+                                this.$router.push('/app/post-list')
                             })
             await this.submitPost(handler)
         },

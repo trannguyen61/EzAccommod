@@ -1,7 +1,6 @@
 import {
     API_SIGNUP,
     API_LOGIN,
-    API_LOGOUT
 } from '@/api/apiUrl'
 
 export default $axios => ({
@@ -11,10 +10,6 @@ export default $axios => ({
 
     login (payload) {
         return $axios.post(API_LOGIN, payload)
-    },
-
-    logout () {
-        return $axios.get(API_LOGOUT)
     },
 
     getUserProfile (payload) {

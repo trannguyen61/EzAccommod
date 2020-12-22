@@ -92,7 +92,7 @@
                       Họ tên chủ trọ:
                     </div>
                     <div class="item--text">
-                      {{ room.owner.name }}
+                      {{ `${room.author.lastName} ${room.author.firstName}` }}
                     </div>
                   </div>
                   <div>
@@ -100,7 +100,7 @@
                       Số điện thoại liên lạc:
                     </div>
                     <div class="item--text">
-                      {{ room.owner.phone }}
+                      {{ room.author.phoneNumber }}
                     </div>
                   </div>
                   <div>
@@ -130,18 +130,18 @@
                   <tbody>
                     <tr>
                       <td>Diện tích</td>
-                      <td>{{ room.area }} m<sup>2</sup></td>
+                      <td>{{ room.rooms[0].area }} m<sup>2</sup></td>
                     </tr>
 
                     <tr>
                       <td>Số phòng cho thuê</td>
-                      <td>{{ room.roomNum }} phòng</td>
+                      <td>{{ room.rooms[0].roomNum }} phòng</td>
                     </tr>
 
                     <tr>
                       <td>Địa chỉ</td>
                       <td>
-                        {{ room.address }}
+                        {{ roomFullAddress }}
                       </td>
                     </tr>
 
@@ -157,7 +157,7 @@
                       <td>
                         <ul class="facilities ml-auto mr-auto">
                           <li
-                            v-for="fac in room.services"
+                            v-for="fac in room.rooms[0].services"
                             :key="fac"
                           >
                             {{ defaultRoom.roomFacilities.find(e => e.value == fac).name }}
@@ -178,7 +178,7 @@
                   Giá thuê <br>
                 </div>
                 <div class="price">
-                  {{ room.price }} đồng/tháng
+                  {{ room.rooms[0].price }} đồng/tháng
                 </div>
               </div>
             </v-col>
@@ -212,7 +212,7 @@ import RoomReview from '@/components/landing/RoomReview'
 import ImgViewer from '@/components/landing/ImgViewer'
 import ReportDialog from '@/components/landing/ReportDialog'
 
-import { ROOM_TYPES, ROOM_FACILITIES } from '@/consts/consts'
+import { ROOM_TYPES, ROOM_FACILITIES, CITIES, HANOI_DISTRICTS, HANOI_WARDS } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
@@ -222,31 +222,35 @@ export default {
     data () {
         return {
             id: null,
-            room: {
-                id: '123',
-                type: 1,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3],
-                favorite: 2,
-                imgs: [ 'https://i.imgur.com/v39ykUw.jpeg' ],
-                owner: {
-                    name: 'Nakayama Haruki',
-                    phone: '113'
-                }
-            },
+            room: {},
             defaultRoom: {
                 roomTypes: ROOM_TYPES,
-                roomFacilities: ROOM_FACILITIES
+                roomFacilities: ROOM_FACILITIES,
+                cities: CITIES,
+                hanoiDistricts: HANOI_DISTRICTS,
+                hanoiWards: HANOI_WARDS
             }
         }
     },
 
+    computed: {
+      roomFullAddress () {
+        const findCity = this.defaultRoom.cities.find(e => e.id == this.room.address.city)
+        const findDistrict = this.defaultRoom.hanoiDistricts.find(e => e.id == this.room.address.district)
+        const findWard = this.defaultRoom.hanoiWards.find(e => e.id == this.room.address.ward)
+
+        const city = findCity ? findCity.name : ''
+        const district = findDistrict ? findDistrict.name : ''
+        const ward = findWard ? findWard.name : ''
+        const road = this.room.address.road
+
+        return `${road}, ${ward}, ${district}, ${city}`
+      }
+    },
+
     mounted () {
         this.id = this.$route.params.id
+        this.onGetRoomDetail()
     },
 
     methods: {
@@ -272,10 +276,12 @@ export default {
         },
 
         async onGetRoomDetail () {
-            const data = { id: this.id }
+            const data = { post_id: this.id }
             const handler = new ApiHandler()
                             .setData(data)
-                            .setOnResponse(res => this.room = res)
+                            .setOnResponse(res => {
+                              this.room = res.post
+                            })
             await this.getRoomDetail(handler)
         }
     }

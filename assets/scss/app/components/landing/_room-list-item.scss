@@ -5,6 +5,7 @@
   padding: 20px 20px;
   border: 1px solid $dark;
   border-radius: $border-radius;
+  margin-bottom: 20px;
 
   @media #{map-get($display-breakpoints, 'md-and-up')} {
     padding: 20px 25px;
@@ -39,8 +40,9 @@
     }
   }
 
-  .title {
+  .content-title {
     font-size: 1.4em !important;
+    font-weight: bolder;
 
     .icon {
       margin-left: 15px;
@@ -52,6 +54,7 @@
     font-weight: bold;
     color: $dark;
     font-size: 1.3em;
+    margin-top: 5px;
   }
 
   .text {

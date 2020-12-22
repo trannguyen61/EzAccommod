@@ -9,7 +9,7 @@
       >
         <room-list-item
           v-for="room in rooms"
-          :key="room.id"
+          :key="room._id"
           :room="room"
         />
         <button
@@ -38,22 +38,13 @@ export default {
 
     data () {
       return {
-        rooms: [{
-                id: '123',
-                type: 1,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3]
-        }],
+        rooms: [],
         roomPagination: 1
       }
     },
 
     mounted () {
-      // this.onGetRoomList()
+      this.onGetRoomList()
     },
 
     methods: {
@@ -62,12 +53,12 @@ export default {
       }),
 
       async onGetRoomList () {
-        const handler = new ApiHandler().setOnResponse(res => this.rooms = res)
+        const handler = new ApiHandler().setOnResponse(res => this.rooms = res.posts)
         await this.getRoomList(handler)
       },
 
       async onLoadMoreRooms () {
-        const handler = new ApiHandler().setOnResponse(res => this.rooms = res)
+        const handler = new ApiHandler().setOnResponse(res => this.rooms = res.posts)
         await this.getRoomList(handler)
       },
 

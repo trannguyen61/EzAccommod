@@ -9,7 +9,6 @@ export const BASE_URL = 'https://easy-accomod-api.herokuapp.com/api'
 export const API_USER = '/user'
 export const API_SIGNUP = API_USER + '/register'
 export const API_LOGIN = API_USER + '/login'
-export const API_LOGOUT = API_USER + '/logout'
 
 /*
 * ROOM SERVICES

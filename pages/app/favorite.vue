@@ -43,14 +43,28 @@ export default {
         return {
             rooms: [{
                 id: '123',
-                type: 1,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3],
-                favorite: true
+                type: "1",
+                address: {
+                  city: "1",
+                  district: "1",
+                  ward: "1",
+                  road: "1",
+                  addressDetail: "abc",
+                },
+                rooms: [
+                  { 
+                    price: '1.000.000',
+                    services: ["1", "2", "3"],
+                    roomNum: 2,
+                    area: 30,
+                  }
+                ],
+                favorite: 10,
+                views: 100,
+                checked: true,
+                active: false,
+                expiredAt: '2021-01-06',
+                fee: '1.500.000'
             }]
         }
     },

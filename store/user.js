@@ -18,6 +18,14 @@ export const getters = {
 
   user(state) {
     return state.user
+  },
+
+  isOwner(state) {
+    return state.user && state.user.role == 'owner'
+  },
+
+  userName(state) {
+    return `${state.user.lastName} ${state.user.firstName}`
   }
 }
 
@@ -37,7 +45,7 @@ export const mutations = {
       localStorage.removeItem('user')
       state.user = null
     } else {
-      localStorage.setItem('user', user)
+      localStorage.setItem('user', JSON.stringify(user))
       state.user = user  
     }
   }
@@ -118,39 +126,13 @@ export const actions = {
       await handler.setOnRequest(onRequest).execute()
     },
 
-    async changePassword({ commit }, handler) {
-      const onRequest = async () => {
-        const rawData = await this.$userServices.changePassword(handler.data)
-        const response = new ResponseHelper(rawData)
-        
-        if (response.isSuccess()) {
-          notificationHelper.notifySuccess('Thành công', 'Mật khẩu của bạn đã được thay đổi!')
-        } else {
-          const errorMessage = response.getErrorMessage()
-          throw new CustomError("Có lỗi khi thay đổi mật khẩu", errorMessage)
-        }  
-      }
-      await handler.setOnRequest(onRequest).execute()
-    },
-
-    async logout ({commit}, handler) {
-      const onRequest = async () => {
-        const rawData = await this.$userServices.logout(handler.data)
-        const response = new ResponseHelper(rawData)
-        
-        if (response.isSuccess()) {
-          commit('setAccessToken', null)
-          commit('setUser', null)
-          Vue.notify({
-            type: 'success',
-            title: 'Đăng xuất thành công',
-          })
-        } else {
-          const errorMessage = response.getErrorMessage()
-          throw new CustomError("Có lỗi khi đăng xuất mật khẩu", errorMessage)
-        }  
-      }
-      await handler.setOnRequest(onRequest).execute()
-  }
+    async logout ({commit}) {
+      commit('setAccessToken', null)
+      commit('setUser', null)
+      Vue.notify({
+        type: 'success',
+        title: 'Đăng xuất thành công',
+      })
+    }
 }
 

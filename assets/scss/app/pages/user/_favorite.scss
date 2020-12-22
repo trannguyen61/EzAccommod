@@ -12,6 +12,11 @@
 
   &--content {
     display: flex;
+    flex-direction: column;
+
+    @media #{map-get($display-breakpoints, 'md-and-up')} {
+      flex-direction: row;
+    }
   }
 
   &--rooms {

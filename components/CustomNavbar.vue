@@ -178,7 +178,7 @@
 
 <script>
 import ApiHandler from '@/helpers/ApiHandler'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -202,16 +202,9 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      logout: 'user/logout'
-    }),
-
     async onLogout () {
-      const handler = new ApiHandler()
-                      .setOnResponse(() => {
-                        this.$router.push('/')
-                      })
-      await this.logout(handler)
+      this.logout()
+      this.$router.push('/')
     }
   }
 }

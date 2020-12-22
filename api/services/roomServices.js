@@ -20,8 +20,8 @@ export default $axios => ({
         // return $axios.get(API_GET_ROOM_LIST)
     },
 
-    getRoomDetail (payload) {
-        // return $axios.get(API_GET_ROOM_LIST)
+    getRoomDetail ({ post_id }) {
+        return $axios.get(`${API_GET_ROOM_LIST}/${post_id}`)
     },
 
     submitReview (payload) {

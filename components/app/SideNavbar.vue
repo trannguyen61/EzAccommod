@@ -16,7 +16,7 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="text-uppercase">
-            Nakayama Haruki
+            {{ userName }}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -38,7 +38,10 @@
         </v-list-item>
       </nuxt-link>
 
-      <nuxt-link to="/app/create-post">
+      <nuxt-link
+        v-if="isOwner"
+        to="/app/create-post"
+      >
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-edit</v-icon>
@@ -50,7 +53,10 @@
         </v-list-item>
       </nuxt-link>
 
-      <nuxt-link to="/app/post-list">
+      <nuxt-link
+        v-if="isOwner"
+        to="/app/post-list"
+      >
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-list</v-icon>
@@ -66,11 +72,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     data () {
         return {
             drawer: false
         }
+    },
+
+    computed: {
+      ...mapGetters({
+        userName: 'user/userName',
+        isOwner: 'user/isOwner'
+      })
     }
 }
 </script>

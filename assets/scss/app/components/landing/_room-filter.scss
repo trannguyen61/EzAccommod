@@ -1,7 +1,11 @@
 .filter {
-  padding: 15px 20px;
+  padding: 5px 20px;
+  border: 1px solid $dark;
+  border-radius: $border-radius;
+
   @media #{map-get($display-breakpoints, 'md-and-up')} {
     width: 25%;
+    border: none;
   }
 
   &--title {
