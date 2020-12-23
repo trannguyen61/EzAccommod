@@ -10,7 +10,7 @@
         {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
         <v-icon
           color="dark"
-          class="icon"
+          class="icon ml-3"
         >
           fas fa-chevron-right
         </v-icon>
@@ -21,13 +21,13 @@
         class="img"
       >
       <div class="price">
-        {{ room.price }} đồng/tháng
+        {{ room.rooms[0].price }} đồng/tháng
       </div>
     </div>
     <v-divider class="my-3" />
     <div class="detail">
-      {{ room.address }} <br>
-      {{ room.detailedAddress }}
+      {{ room.detailedAddress }} <br>
+      {{ roomFullAddress }}
     </div>
     <v-btn
       icon
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { ROOM_TYPES } from '@/consts/consts'
+import { ROOM_TYPES, CITIES, HANOI_DISTRICTS, HANOI_WARDS } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
 import { mapActions } from 'vuex'
 
@@ -66,9 +66,27 @@ export default {
     data () {
         return {
             defaultRoom: {
-                roomTypes: ROOM_TYPES
+                roomTypes: ROOM_TYPES,
+                cities: CITIES,
+                hanoiDistricts: HANOI_DISTRICTS,
+                hanoiWards: HANOI_WARDS
             }
         }
+    },
+
+    computed: {
+      roomFullAddress () {
+        const findCity = this.defaultRoom.cities.find(e => e.id == this.room.address.city)
+        const findDistrict = this.defaultRoom.hanoiDistricts.find(e => e.id == this.room.address.district)
+        const findWard = this.defaultRoom.hanoiWards.find(e => e.id == this.room.address.ward)
+
+        const city = findCity ? findCity.name : ''
+        const district = findDistrict ? findDistrict.name : ''
+        const ward = findWard ? findWard.name : ''
+        const road = this.room.address.road
+
+        return `${road}, ${ward}, ${district}, ${city}`
+      }
     },
 
     methods: {

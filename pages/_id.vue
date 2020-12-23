@@ -6,34 +6,42 @@
           cols="12"
           md="5"
         >
-          <v-carousel
-            cycle
-            height="400"
-            hide-delimiter-background
-            show-arrows-on-hover
-            class="carousel"
-          >
-            <v-carousel-item
-              v-for="(img, i) in room.imgs"
-              :key="i"
+          <template v-if="!loading">
+            <v-carousel
+              cycle
+              height="400"
+              hide-delimiter-background
+              show-arrows-on-hover
+              class="carousel"
             >
-              <div class="carousel-mask">
-                <v-icon
-                  large
-                  color="primary"
-                  class="carousel-look"
-                  @click="openImgViewer(img)"
-                >
-                  fas fa-search
-                </v-icon>
-              </div>
-              <img
-                :src="require('@/assets/images/room01.jpg')"
-                alt=""
-                class="carousel-img"
+              <v-carousel-item
+                v-for="(img, i) in room.imgs"
+                :key="i"
               >
-            </v-carousel-item>
-          </v-carousel>
+                <div class="carousel-mask">
+                  <v-icon
+                    large
+                    color="primary"
+                    class="carousel-look"
+                    @click="openImgViewer(img)"
+                  >
+                    fas fa-search
+                  </v-icon>
+                </div>
+                <img
+                  :src="require('@/assets/images/room01.jpg')"
+                  alt=""
+                  class="carousel-img"
+                >
+              </v-carousel-item>
+            </v-carousel>
+          </template>
+          <template v-else>
+            <v-skeleton-loader
+              max-height="400"
+              type="image, article"
+            />
+          </template>
 
           <div class="tool">
             <v-tooltip top>
@@ -52,7 +60,7 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <span>{{ room.favorite }} yêu thích</span>
+              <span>{{ !!room ? `${room.favorite} ` : '' }} Yêu thích</span>
             </v-tooltip>
             <v-tooltip top>
               <template #activator="{ on, attrs }">
@@ -91,7 +99,10 @@
                     <div class="item--subtitle">
                       Họ tên chủ trọ:
                     </div>
-                    <div class="item--text">
+                    <div
+                      v-if="!!room"
+                      class="item--text"
+                    >
                       {{ `${room.author.lastName} ${room.author.firstName}` }}
                     </div>
                   </div>
@@ -99,7 +110,10 @@
                     <div class="item--subtitle">
                       Số điện thoại liên lạc:
                     </div>
-                    <div class="item--text">
+                    <div
+                      v-if="!!room"
+                      class="item--text"
+                    >
                       {{ room.author.phoneNumber }}
                     </div>
                   </div>
@@ -107,7 +121,10 @@
                     <div class="item--subtitle">
                       Kiểu phòng cho thuê:
                     </div>
-                    <div class="item--text">
+                    <div
+                      v-if="!!room"
+                      class="item--text"
+                    >
                       {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}
                     </div>
                   </div>
@@ -120,7 +137,10 @@
             <v-col
               cols="12"
             >
-              <div class="detail-list-item mt-4">
+              <div
+                class="detail-list-item"
+                :class="$vuetify.breakpoint.mdAndUp ? 'mt-4' : ''"
+              >
                 <div class="item--title">
                   Chi tiết loại phòng
                 </div>
@@ -130,31 +150,35 @@
                   <tbody>
                     <tr>
                       <td>Diện tích</td>
-                      <td>{{ room.rooms[0].area }} m<sup>2</sup></td>
+                      <td v-if="!!room">
+                        {{ room.rooms[0].area }} m<sup>2</sup>
+                      </td>
                     </tr>
 
                     <tr>
                       <td>Số phòng cho thuê</td>
-                      <td>{{ room.rooms[0].roomNum }} phòng</td>
+                      <td v-if="!!room">
+                        {{ room.rooms[0].roomNum }} phòng
+                      </td>
                     </tr>
 
                     <tr>
                       <td>Địa chỉ</td>
-                      <td>
+                      <td v-if="!!room">
                         {{ roomFullAddress }}
                       </td>
                     </tr>
 
                     <tr>
                       <td>Landmark</td>
-                      <td>
+                      <td v-if="!!room">
                         {{ room.detailedAddress }}
                       </td>
                     </tr>
 
                     <tr>
                       <td>Cơ sở vật chất</td>
-                      <td>
+                      <td v-if="!!room">
                         <ul class="facilities ml-auto mr-auto">
                           <li
                             v-for="fac in room.rooms[0].services"
@@ -173,11 +197,17 @@
 
           <v-row>
             <v-col>
-              <div class="detail-list-item mt-4">
+              <div
+                class="detail-list-item"
+                :class="$vuetify.breakpoint.mdAndUp ? 'mt-4' : ''"
+              >
                 <div class="item--title">
                   Giá thuê <br>
                 </div>
-                <div class="price">
+                <div
+                  v-if="!!room"
+                  class="price"
+                >
                   {{ room.rooms[0].price }} đồng/tháng
                 </div>
               </div>
@@ -221,8 +251,9 @@ export default {
 
     data () {
         return {
+            loading: false,
             id: null,
-            room: {},
+            room: null,
             defaultRoom: {
                 roomTypes: ROOM_TYPES,
                 roomFacilities: ROOM_FACILITIES,
@@ -231,6 +262,11 @@ export default {
                 hanoiWards: HANOI_WARDS
             }
         }
+    },
+
+    async fetch() {
+        this.id = this.$route.params.id
+        await this.onGetRoomDetail()
     },
 
     computed: {
@@ -246,11 +282,6 @@ export default {
 
         return `${road}, ${ward}, ${district}, ${city}`
       }
-    },
-
-    mounted () {
-        this.id = this.$route.params.id
-        this.onGetRoomDetail()
     },
 
     methods: {
@@ -276,11 +307,17 @@ export default {
         },
 
         async onGetRoomDetail () {
+            this.loading = true
+
             const data = { post_id: this.id }
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
+                              console.log(res)
                               this.room = res.post
+                            })
+                            .setOnFinally(() => {
+                              this.loading = true
                             })
             await this.getRoomDetail(handler)
         }

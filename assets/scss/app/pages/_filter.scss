@@ -6,8 +6,18 @@
     flex-direction: row;
   }
 
+  .empty-warning {
+    padding: 10px 15px;
+    border: 1px solid $light;
+    border-radius: $border-radius;
+    background-color: $secondary;
+    color: $dark;
+  }
+
   .room-list {
     padding: 15px 20px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

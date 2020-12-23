@@ -2,10 +2,18 @@
   <div class="filter-page">
     <room-filter @filtered="getFilter" />
     <v-row class="room-list">
+      <v-col>
+        <p
+          v-if="!rooms.length"
+          class="empty-warning"
+        >
+          Không tìm thấy kết quả phù hợp!
+        </p>
+      </v-col>
       <v-col
         v-for="room in rooms"
         :key="room.id"
-        cols="2"
+        cols="12"
         md="4"
       >
         <filter-item :room="room" />
@@ -26,16 +34,7 @@ export default {
 
     data () {
         return {
-            rooms: [{
-                id: '123',
-                type: 1,
-                roomNum: 2,
-                area: 30,
-                address: 'Giữa Hồ Gươm - Hoàn Kiếm - Hà Nội',
-                detailedAddress: 'Cạnh vườn hoa Lý Thái Tổ',
-                price: '1.000.000',
-                services: [1, 2, 3]
-            }]
+            rooms: []
         }
     },
 
@@ -46,7 +45,7 @@ export default {
     },
 
     mounted () {
-
+      this.onFilterRooms()
     },
 
     methods: {

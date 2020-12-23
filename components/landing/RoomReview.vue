@@ -34,11 +34,19 @@
     </div>
     <v-divider class="my-4" />
     <div class="show-review" />
-    <review-item
-      v-for="(cmt, i) in commentList"
-      :key="i"
-      :comment="cmt"
-    />
+    <template v-if="!loading">
+      <review-item
+        v-for="(cmt, i) in commentList"
+        :key="i"
+        :comment="cmt"
+      />
+    </template>
+    <template v-else>
+      <v-skeleton-loader
+        max-height="300"
+        type="image, article"
+      />
+    </template>
   </div>
 </template>
 
@@ -53,6 +61,7 @@ export default {
 
     data () {
         return {
+            loading: false,
             rating: 3,
             comment: '',
             commentList: [{
@@ -86,8 +95,13 @@ export default {
         },
 
         async onGetReviews () {
+            this.loading = true
+
             const handler = new ApiHandler()
                             .setOnResponse(res => this.commentList = res)
+                            .setOnFinally(() => {
+                              this.loading = false
+                            })
             await this.submitReview(handler)
         }
     }

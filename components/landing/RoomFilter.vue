@@ -35,7 +35,7 @@
     >
       <div
         v-if="showFilter"
-        class="filter-items"
+        class="filter--items"
       >
         <v-divider class="my-3" />
         <div class="filter--item">
