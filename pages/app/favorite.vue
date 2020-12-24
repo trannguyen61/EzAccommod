@@ -7,6 +7,12 @@
       <room-filter @filtered="getFilter" />
 
       <div class="favorite--rooms">
+        <p
+          v-if="!rooms.length"
+          class="empty-warning"
+        >
+          Không tìm thấy kết quả!
+        </p>
         <room-list-item
           v-for="room in rooms"
           :key="room.id"
@@ -14,11 +20,21 @@
           class="mt-4"
         />
         <button
+          v-if="rooms.length"
           v-ripple
           class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
           @click="onLoadMoreRooms"
         >
           Xem thêm<br>
+          <v-icon>fas fa-chevron-down</v-icon>
+        </button>
+        <button
+          v-else
+          v-ripple
+          class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
+          @click="onGetFavoriteRooms"
+        >
+          Tải lại <br>
           <v-icon>fas fa-chevron-down</v-icon>
         </button>
       </div>
@@ -41,31 +57,7 @@ export default {
 
     data () {
         return {
-            rooms: [{
-                id: '123',
-                type: "1",
-                address: {
-                  city: "1",
-                  district: "1",
-                  ward: "1",
-                  road: "1",
-                  addressDetail: "abc",
-                },
-                rooms: [
-                  { 
-                    price: '1.000.000',
-                    services: ["1", "2", "3"],
-                    roomNum: 2,
-                    area: 30,
-                  }
-                ],
-                favorite: 10,
-                views: 100,
-                checked: true,
-                active: false,
-                expiredAt: '2021-01-06',
-                fee: '1.500.000'
-            }]
+            rooms: []
         }
     },
 

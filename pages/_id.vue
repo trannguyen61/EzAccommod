@@ -60,7 +60,7 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <span>{{ !!room ? `${room.favorite} ` : '' }} Yêu thích</span>
+              <span>{{ !!room ? `${room.like} ` : '' }} Yêu thích</span>
             </v-tooltip>
             <v-tooltip top>
               <template #activator="{ on, attrs }">
@@ -226,7 +226,7 @@
         lg="6"
         md="8"
       >
-        <room-review />
+        <room-review :post="room" />
       </v-col>
     </v-row>
 
@@ -295,10 +295,10 @@ export default {
         },
 
         async onFavoriteRoom () {
-            const data = { id: this.id }
+            const data = { post_id: this.id }
             const handler = new ApiHandler()
                             .setData(data)
-                            .setOnResponse(res => this.room = res)
+                            .setOnResponse(() => this.onGetRoomDetail())
             await this.favoriteRoom(handler)
         },
 
@@ -317,7 +317,7 @@ export default {
                               this.room = res.post
                             })
                             .setOnFinally(() => {
-                              this.loading = true
+                              this.loading = false
                             })
             await this.getRoomDetail(handler)
         }

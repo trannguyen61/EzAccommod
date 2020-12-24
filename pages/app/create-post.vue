@@ -21,6 +21,12 @@ export default {
 
     layout: 'app',
 
+    middleware ({ redirect, store }) {
+      if (!store.getters['user/isOwner']) {
+        redirect('/app')
+      }
+    },
+
     data () {
       return {
       }

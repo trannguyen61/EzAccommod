@@ -15,7 +15,7 @@
       class="mr-2"
     />
     <div style="color: white;">
-      Đăng nhập với Facebook
+      {{ $vuetify.breakpoint.mdAndUp ? 'Đăng nhập với Facebook' : 'Đăng nhập' }}
     </div>
   </v-btn>
 </template>

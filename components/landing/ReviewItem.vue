@@ -2,21 +2,24 @@
   <div class="room-list-item comment-item">
     <div class="content">
       <div class="title">
+        {{ comment.title }}
+      </div>
+      <div class="subtitle">
         {{ comment.owner }}
       </div>
       <v-rating
         empty-icon="far fa-star"
         full-icon="fas fa-star"
-        color="primary"
-        background-color="primary"
+        color="warning"
+        background-color="warning"
         length="5"
         size="24"
         readonly
-        :value="comment.rating"
+        :value="comment.star"
       />
       <div class="text">
         <div class="detail">
-          {{ comment.comment }}
+          {{ comment.content }}
         </div>
       </div>
     </div>

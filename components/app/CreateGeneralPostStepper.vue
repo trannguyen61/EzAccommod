@@ -451,7 +451,8 @@ export default {
     methods: {
         ...mapActions({
             getPostFee: 'room/getPostFee',
-            submitPost: 'room/submitPost'
+            submitPost: 'room/submitPost',
+            uploadImage: 'room/uploadImage'
         }),
 
         getChosenPost () {
@@ -492,6 +493,14 @@ export default {
 
         deleteImgs (img) {
             this.imgsToDelete.push(img)
+        },
+
+        async onUploadImage () {
+          const data = new FormData()
+          data.append('image', this.postImgs[0])
+          const handler = new ApiHandler()
+                          .setData(data)
+          await this.uploadImage(handler)
         },
 
         onSubmitPost () {

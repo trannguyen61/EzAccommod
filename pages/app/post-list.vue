@@ -120,59 +120,18 @@ import { mapActions } from 'vuex'
 export default {
 
     components: { ProlongTimeDialog, EditPostDialog, ConfirmDialog },
+
     layout: 'app',
+
+    middleware ({ redirect, store }) {
+      if (!store.getters['user/isOwner']) {
+        redirect('/app')
+      }
+    },
 
     data () {
         return {
-            rooms: [{
-                id: '123',
-                type: "1",
-                address: {
-                  city: "1",
-                  district: "1",
-                  ward: "1",
-                  road: "1",
-                  addressDetail: "abc",
-                },
-                rooms: [
-                  { 
-                    price: '1.000.000',
-                    services: ["1", "2", "3"],
-                    roomNum: 2,
-                    area: 30,
-                  }
-                ],
-                favorite: 10,
-                views: 100,
-                checked: true,
-                active: false,
-                expiredAt: '2021-01-06',
-                fee: '1.500.000'
-            }, {
-                id: '124',
-                type: "3",
-                address: {
-                  city: "1",
-                  district: "1",
-                  ward: "1",
-                  road: "1",
-                  addressDetail: "abc",
-                },
-                rooms: [
-                  { 
-                    price: '1.000.000',
-                    services: ["1", "2", "3", "4"],
-                    roomNum: 2,
-                    area: 30,
-                  }
-                ],
-                expiredAt: '2021-01-06',
-                favorite: 6,
-                views: 65,
-                checked: false,
-                active: true,
-                fee: '1.000.000'
-            }],
+            rooms: [],
             chosenPost: null,
             totalItems: 10,
             loading: false,

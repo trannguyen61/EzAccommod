@@ -10,6 +10,12 @@
     }
   }
 
+  .empty-warning {
+    padding: 10px 15px;
+    color: $dark;
+    text-align: center;
+  }
+
   &--content {
     display: flex;
     flex-direction: column;

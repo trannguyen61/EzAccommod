@@ -8,6 +8,12 @@
         id="rooms"
         class="room-list"
       >
+        <p
+          v-if="!rooms.length"
+          class="empty-warning"
+        >
+          Không tìm thấy kết quả!
+        </p>
         <room-list-item
           v-for="room in rooms"
           :key="room._id"
@@ -28,7 +34,6 @@
           class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
           @click="onGetRoomList"
         >
-          Không có dữ liệu <br>
           Tải lại
         </button>
       </div>

@@ -5,101 +5,46 @@
         Đăng nhập
       </div>
 
-      <v-tabs
-        v-model="tab"
-        centered
-        background-color="transparent"
+      <v-form
+        v-model="formValue"
+        class="auth-form--form"
+        @submit.prevent="onLogin"
       >
-        <v-tab>
-          Người thuê trọ
-        </v-tab>
-        <v-tab>
-          Chủ nhà trọ
-        </v-tab>
-      </v-tabs>
+        <v-text-field
+          v-model="form.email"
+          :rules="isEmail()"
+          label="Email"
+          class="mt-6"
+        />
 
-      <v-tabs-items v-model="tab">
-        <v-tab-item class="auth-form--tab">
-          <v-form
-            v-model="formValue"
-            class="auth-form--form"
-            @submit.prevent="onLogin"
-          >
-            <v-text-field
-              v-model="form.email"
-              :rules="isEmail()"
-              label="Email"
-              class="mt-6"
-            />
+        <v-text-field
+          v-model="form.password"
+          :rules="validPassword()"
+          :append-icon="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"
+          :type="showPassword ? 'text' : 'password'"
+          label="Mật khẩu"
+          class="mt-6"
+          @click:append="showPassword = !showPassword"
+        />
 
-            <v-text-field
-              v-model="form.password"
-              :rules="validPassword()"
-              :append-icon="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :type="showPassword ? 'text' : 'password'"
-              label="Mật khẩu"
-              class="mt-6"
-              @click:append="showPassword = !showPassword"
-            />
+        <button
+          v-ripple
+          type="submit"
+          :disabled="!formValue || loading"
+          class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
+        >
+          Đăng nhập
+        </button>
+        <v-progress-linear
+          v-if="loading"
+          indeterminate
+          color="primary"
+        />
 
-            <button
-              v-ripple
-              type="submit"
-              :disabled="!formValue || loading"
-              class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
-            >
-              Đăng nhập
-            </button>
-            <v-progress-linear
-              v-if="loading"
-              indeterminate
-              color="primary"
-            />
+        <v-divider class="my-6" />
 
-            <v-divider class="my-6" />
-
-            <facebook-login-button />
-          </v-form>
-        </v-tab-item>
-        <v-tab-item class="auth-form--tab">
-          <v-form
-            v-model="formValue"
-            class="auth-form--form"
-            @submit.prevent="onLogin"
-          >
-            <v-text-field
-              v-model="form.email"
-              :rules="isEmail()"
-              label="Email"
-              class="mt-6"
-            />
-
-            <v-text-field
-              v-model="form.password"
-              :rules="validPassword()"
-              :append-icon="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :type="showPassword ? 'text' : 'password'"
-              label="Mật khẩu"
-              class="mt-6"
-              @click:append="showPassword = !showPassword"
-            />
-
-            <button
-              v-ripple
-              type="submit"
-              :disabled="!formValue || loading"
-              class="custom-btn custom-btn--text custom-btn__densed custom-btn__block mt-6"
-            >
-              Đăng nhập
-            </button>
-            <v-progress-linear
-              v-if="loading"
-              indeterminate
-              color="primary"
-            />
-          </v-form>
-        </v-tab-item>
-      </v-tabs-items>
+        <facebook-login-button />
+      </v-form>
     </div>
   </div>
 </template>

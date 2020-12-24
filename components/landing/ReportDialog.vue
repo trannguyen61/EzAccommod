@@ -18,7 +18,7 @@
           hide-details
         />
         <v-textarea
-          v-model="reason"
+          v-model="detail"
           label="Chi tiết"
         />
       </div>
@@ -63,7 +63,7 @@ export default {
         return {
             dialog: false,
             report: [],
-            reason: '',
+            detail: '',
             violations: ROOM_VIOLATIONS
         }
     },
@@ -74,7 +74,13 @@ export default {
         }),
 
         async onReportRoom () {
-            const data = { id: this.id }
+            const data = { 
+              post_id: this.id,
+              data: {
+                report: this.report,
+                detail: this.detail
+              }
+            }
             const handler = new ApiHandler()
                             .setData(data)
             await this.reportRoom(handler)

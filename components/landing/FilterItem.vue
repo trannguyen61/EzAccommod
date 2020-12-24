@@ -35,7 +35,7 @@
       @click="onFavoriteRoom"
     >
       <v-icon
-        v-if="!room.favorite"
+        v-if="!room.like"
         color="primary"
       >
         far fa-heart
@@ -86,6 +86,10 @@ export default {
         const road = this.room.address.road
 
         return `${road}, ${ward}, ${district}, ${city}`
+      },
+
+      postId () {
+        return this.room ? this.room._id : ''
       }
     },
 
@@ -95,7 +99,7 @@ export default {
       }),
 
       async onFavoriteRoom () {
-        const data = {}
+        const data = { post_id: this.postId }
         const handler = new ApiHandler().setData(data)
         await this.favoriteRoom(handler)
       }
