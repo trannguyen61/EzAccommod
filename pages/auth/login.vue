@@ -7,7 +7,7 @@
 
       <v-form
         v-model="formValue"
-        class="auth-form--form"
+        class="auth-form--form ml-auto mr-auto"
         @submit.prevent="onLogin"
       >
         <v-text-field

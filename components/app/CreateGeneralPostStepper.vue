@@ -335,13 +335,13 @@
           class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
           @click="onSubmitPost"
         >
-          Hoàn tất
+          {{ !loading ? 'Hoàn tất' : '' }}
+          <v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="primary"
+          />
         </button>
-        <v-progress-linear
-          v-if="loading"
-          indeterminate
-          color="primary"
-        />
 
         <button
           v-ripple

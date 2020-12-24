@@ -253,16 +253,16 @@ async prolongTimePost ({ commit }, handler) {
   await handler.setOnRequest(onRequest).execute()
 },
 
-async uploadImage ({ commit }, handler) {
+async getOwnerRooms ({ commit }, handler) {
   const onRequest = async () => {
-      const rawData = await this.$roomServices.uploadImage(handler.data)
+      const rawData = await this.$roomServices.getOwnerRooms(handler.data)
       const response = new ResponseHelper(rawData)
       
       if (response.isSuccess()) {
         return response.getData()
       } else {
         const errorMessage = response.getErrorMessage()
-        throw new CustomError("Có lỗi khi đăng ảnh", errorMessage)
+        throw new CustomError("Có lỗi khi tải bài đăng", errorMessage)
       }  
   }
   await handler.setOnRequest(onRequest).execute()
