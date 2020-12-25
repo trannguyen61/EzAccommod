@@ -50,7 +50,7 @@ export default $axios => ({
         // return $axios.get(API_GET_ROOM_LIST)
     },
 
-    getPostFee () {
+    getPostPrice () {
         // return $axios.get(API_GET_ROOM_LIST)
     },
 
