@@ -316,6 +316,14 @@ export default {
                               console.log(res)
                               this.room = res.post
                             })
+                            .setOnError(() => {
+                              Vue.notify({
+                                type: 'warning',
+                                title: 'Không tìm thấy bài đăng',
+                                text: 'Không tìm thấy bài đăng (┬┬﹏┬┬) Bạn sẽ được điều hướng về trang chủ.'
+                              })
+                              this.$router.push('/')
+                            })
                             .setOnFinally(() => {
                               this.loading = false
                             })
