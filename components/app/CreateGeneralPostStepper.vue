@@ -484,7 +484,7 @@ export default {
             })
         },
 
-        async onGetPostPrice () {
+        onGetPostPrice () {
             const findPostPrice = this.defaultInfo.postPrice.find(e => e.days == this.timeFrame)
             if (!findPostPrice) {
               this.timeFrame = null
