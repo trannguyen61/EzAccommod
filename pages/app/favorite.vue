@@ -18,6 +18,7 @@
           :key="room.id"
           :room="room"
           class="mt-4"
+          @fav="onGetFavoriteRooms"
         />
         <button
           v-if="rooms.length"
@@ -47,7 +48,7 @@ import RoomListItem from '@/components/landing/RoomListItem'
 import RoomFilter from '@/components/landing/RoomFilter'
 
 import ApiHandler from '@/helpers/ApiHandler'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
 
@@ -55,16 +56,32 @@ export default {
 
     layout: 'app',
 
+    middleware ({ redirect, store }) {
+      if (!store.getters['user/isRenter']) {
+        redirect('/app')
+      }
+    },
+
     data () {
         return {
             rooms: []
         }
     },
 
+    computed: {
+      ...mapGetters({
+        userFavoriteRooms: 'user/userFavoriteRooms'
+      }),
+    },
+
+    mounted () {
+      this.onGetFavoriteRooms()
+    },
+
     methods: {
         ...mapActions({
-            getFavoriteRooms: 'room/getFavoriteRooms',
-            filterRooms: 'room/filterRooms'
+            filterRooms: 'room/filterRooms',
+            getRoomList: 'room/getRoomList'
         }),
 
         async onGetFavoriteRooms () {
@@ -72,9 +89,11 @@ export default {
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(res => {
-                                this.room = res
+                                this.rooms = res.posts.filter(room => 
+                                  this.userFavoriteRooms.some(e => e == room._id)
+                                )
                             })
-            await this.getFavoriteRooms(handler)
+            await this.getRoomList(handler)
         },
 
         onLoadMoreRooms () {

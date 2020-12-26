@@ -29,7 +29,10 @@
       dense
       nav
     >
-      <nuxt-link to="/app/favorite">
+      <nuxt-link
+        v-if="isRenter"
+        to="/app/favorite"
+      >
         <v-list-item class="my-2">
           <v-list-item-icon>
             <v-icon>fas fa-heart</v-icon>
@@ -87,7 +90,8 @@ export default {
     computed: {
       ...mapGetters({
         userName: 'user/userName',
-        isOwner: 'user/isOwner'
+        isOwner: 'user/isOwner',
+        isRenter: 'user/isRenter'
       })
     }
 }

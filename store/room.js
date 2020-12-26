@@ -55,9 +55,12 @@ export const actions = {
             const response = new ResponseHelper(rawData)
             
             if (response.isSuccess()) {
+              const post = handler.data.post_id
+              commit('user/addFavRoom', post, { root: true })
+
               Vue.notify({
                 type: 'success',
-                title: 'Đã thay đổi trạng thái yêu thích ╰(*°▽°*)╯',
+                title: 'Đã yêu thích ╰(*°▽°*)╯',
                 text: 'Danh sách các bài đăng đã thích có thể được xem trong trang cá nhân.'
               })
             } else {
@@ -66,6 +69,28 @@ export const actions = {
             }  
         }
         await handler.setOnRequest(onRequest).execute()
+    },
+
+    async removeFavoriteRoom ({ commit, rootGetters }, handler) {
+      const onRequest = async () => {
+          const rawData = await this.$roomServices.removeFavoriteRoom(handler.data)
+          const response = new ResponseHelper(rawData)
+          
+          if (response.isSuccess()) {
+            const index = rootGetters['user/userFavoriteRooms'].findIndex(e => e == handler.data.post_id)
+            commit('user/spliceFavRoom', index, { root: true })
+
+            Vue.notify({
+              type: 'success',
+              title: 'Đã bỏ yêu thích (┬┬﹏┬┬)',
+              text: 'Danh sách các bài đăng đã thích có thể được xem trong trang cá nhân.'
+            })
+          } else {
+            const errorMessage = response.getErrorMessage()
+            throw new CustomError("Có lỗi khi yêu thích phòng", errorMessage)
+          }  
+      }
+      await handler.setOnRequest(onRequest).execute()
     },
 
     async reportRoom ({ commit }, handler) {
@@ -135,21 +160,6 @@ export const actions = {
         }
         await handler.setOnRequest(onRequest).execute()
     },
-
-    async getFavoriteRooms ({ commit }, handler) {
-      const onRequest = async () => {
-          const rawData = await this.$roomServices.getFavoriteRooms(handler.data)
-          const response = new ResponseHelper(rawData)
-          
-          if (response.isSuccess()) {
-              return response.getData()
-          } else {
-            const errorMessage = response.getErrorMessage()
-            throw new CustomError("Có lỗi khi tải phòng", errorMessage)
-          }  
-      }
-      await handler.setOnRequest(onRequest).execute()
-  },
 
   async submitPost ({ commit }, handler) {
     const onRequest = async () => {

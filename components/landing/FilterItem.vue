@@ -35,7 +35,7 @@
       @click="onFavoriteRoom"
     >
       <v-icon
-        v-if="!room.like"
+        v-if="!isFavRoom(room)"
         color="primary"
       >
         far fa-heart
@@ -53,7 +53,8 @@
 <script>
 import { ROOM_TYPES, CITIES, HANOI_DISTRICTS, HANOI_WARDS } from '@/consts/consts'
 import ApiHandler from '@/helpers/ApiHandler'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import Vue from 'vue'
 
 export default {
     props: {
@@ -75,6 +76,13 @@ export default {
     },
 
     computed: {
+      ...mapGetters({
+        userFavoriteRooms: 'user/userFavoriteRooms',
+        isRenter: 'user/isRenter',
+        isOwner: 'user/isOwner',
+        loggedIn: 'user/loggedIn'
+      }),
+
       roomFullAddress () {
         const findCity = this.defaultRoom.cities.find(e => e.id == this.room.address.city)
         const findDistrict = this.defaultRoom.hanoiDistricts.find(e => e.id == this.room.address.district)
@@ -90,18 +98,39 @@ export default {
 
       postId () {
         return this.room ? this.room._id : ''
-      }
+      },
     },
 
     methods: {
       ...mapActions({
-        favoriteRoom: 'room/favoriteRoom'
+        favoriteRoom: 'room/favoriteRoom',
+        removeFavoriteRoom: 'room/removeFavoriteRoom'
       }),
 
+      isFavRoom (room) {
+        return Boolean(this.userFavoriteRooms.find(e => e == room._id))
+      },
+
       async onFavoriteRoom () {
+        if (this.isOwner || !this.loggedIn) {
+          Vue.notify({
+            type: 'warning',
+            title: 'Vui lòng đăng nhập',
+            text: 'Bạn cần có tài khoản người thuê nhà để sử dụng chức năng Yêu thích phòng.'
+          })
+
+          return
+        }
         const data = { post_id: this.postId }
         const handler = new ApiHandler().setData(data)
-        await this.favoriteRoom(handler)
+
+        const alreadyFavRoom = this.userFavoriteRooms.find(e => e == this.postId)
+
+        if (alreadyFavRoom) {
+          await this.removeFavoriteRoom(handler)
+        } else {
+          await this.favoriteRoom(handler)
+        }
       }
     }
 }

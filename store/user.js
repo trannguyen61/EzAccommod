@@ -24,8 +24,16 @@ export const getters = {
     return state.user && state.user.role == 'owner'
   },
 
+  isRenter(state) {
+    return state.user && state.user.role == 'renter'
+  },
+
   userName(state) {
     return state.user ? `${state.user.lastName} ${state.user.firstName}` : null
+  },
+
+  userFavoriteRooms (state) {
+    return state.user ? state.user.favoriteRoom : []
   }
 }
 
@@ -48,6 +56,16 @@ export const mutations = {
       localStorage.setItem('user', JSON.stringify(user))
       state.user = user  
     }
+  },
+
+  spliceFavRoom (state, index) {
+    state.user.favoriteRoom.splice(index, 1)
+    localStorage.setItem('user', JSON.stringify(state.user))
+  },
+
+  addFavRoom (state, room) {
+    state.user.favoriteRoom = state.user.favoriteRoom.concat(room)
+    localStorage.setItem('user', JSON.stringify(state.user))
   }
 }
 
@@ -111,13 +129,6 @@ export const actions = {
         
         if (response.isSuccess()) {
           commit('setUser', response.getData())
-          if (!handler.turnOffSuccess) {
-            Vue.notify({
-                type: 'success',
-                title: 'Đăng nhập thành công',
-                text: 'Chào mừng bạn đến với EzAccommod! Chúc bạn có những trải nghiệm tuyệt vời tại trang.'
-            })
-          }
         } else {
           const errorMessage = response.getErrorMessage()
           throw new CustomError("Lấy thông tin người dùng thất bại", errorMessage)
