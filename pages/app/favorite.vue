@@ -7,30 +7,31 @@
       <room-filter @filtered="getFilter" />
 
       <div class="favorite--rooms">
+        <v-skeleton-loader
+          v-if="loading"
+          width="100%"
+          type="card-avatar, article, actions"
+        />
         <p
-          v-if="!rooms.length"
+          v-if="!rooms.length && !loading"
           class="empty-warning"
         >
           Không tìm thấy kết quả!
         </p>
         <room-list-item
-          v-for="room in rooms"
+          v-for="room in showedRooms"
           :key="room.id"
           :room="room"
           class="mt-4"
           @fav="onGetFavoriteRooms"
         />
+        <v-pagination
+          v-if="rooms.length && !loading"
+          v-model="currentPage"
+          :length="totalPage"
+        />
         <button
-          v-if="rooms.length"
-          v-ripple
-          class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
-          @click="onLoadMoreRooms"
-        >
-          Xem thêm<br>
-          <v-icon>fas fa-chevron-down</v-icon>
-        </button>
-        <button
-          v-else
+          v-if="!rooms.length && !loading"
           v-ripple
           class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
           @click="onGetFavoriteRooms"
@@ -64,7 +65,11 @@ export default {
 
     data () {
         return {
-            rooms: []
+            rooms: [],
+            showedRooms: [],
+            currentPage: 1,
+            loading: false,
+            ITEMS_PER_PAGE: 3
         }
     },
 
@@ -72,6 +77,20 @@ export default {
       ...mapGetters({
         userFavoriteRooms: 'user/userFavoriteRooms'
       }),
+
+      totalPage () {
+        return Math.ceil(this.rooms.length / this.ITEMS_PER_PAGE)
+      }
+    },
+
+    watch: {
+      currentPage () {
+        this.getCurrentPageRooms()
+      },
+
+      rooms () {
+        this.getCurrentPageRooms()
+      }
     },
 
     mounted () {
@@ -84,7 +103,14 @@ export default {
             getRoomList: 'room/getRoomList'
         }),
 
+        getCurrentPageRooms () {
+          const start = this.ITEMS_PER_PAGE * ( this.currentPage - 1 )
+          this.showedRooms = this.rooms.slice(start, start + this.ITEMS_PER_PAGE)
+        },
+
         async onGetFavoriteRooms () {
+            this.loading = true
+
             const data = {}
             const handler = new ApiHandler()
                             .setData(data)
@@ -92,6 +118,9 @@ export default {
                                 this.rooms = res.posts.filter(room => 
                                   this.userFavoriteRooms.some(e => e == room._id)
                                 )
+                            })
+                            .setOnFinally(() => {
+                              this.loading = false
                             })
             await this.getRoomList(handler)
         },

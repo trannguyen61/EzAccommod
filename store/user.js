@@ -95,6 +95,11 @@ export const actions = {
 
         if (response.isSuccess()) {
           const { token, user } = response.getData()
+
+          if (user.role != 'renter' && user.role != 'owner') {
+            throw new CustomError("Đăng nhập thất bại", 'Vui lòng đăng nhập bằng tài khoản người dùng/người cho thuê.')
+          }
+
           commit('setAccessToken', token)
           commit('setUser', user)
         } else {

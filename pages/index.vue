@@ -15,19 +15,15 @@
           Không tìm thấy kết quả!
         </p>
         <room-list-item
-          v-for="room in rooms"
+          v-for="room in showedRooms"
           :key="room._id"
           :room="room"
         />
-        <button
+        <v-pagination
           v-if="rooms.length"
-          v-ripple
-          class="see-more-btn custom-btn custom-btn--text custom-btn__densed"
-          @click="onLoadMoreRooms"
-        >
-          Xem thêm<br>
-          <v-icon>fas fa-chevron-down</v-icon>
-        </button>
+          v-model="currentPage"
+          :length="totalPage"
+        />
         <button
           v-else
           v-ripple
@@ -61,8 +57,26 @@ export default {
     data () {
       return {
         rooms: [],
-        roomPagination: 1,
-        loading: false
+        showedRooms: [],
+        currentPage: 1,
+        loading: false,
+        ITEMS_PER_PAGE: 3
+      }
+    },
+
+    computed: {
+      totalPage () {
+        return Math.ceil(this.rooms.length / this.ITEMS_PER_PAGE)
+      }
+    },
+
+    watch: {
+      currentPage () {
+        this.getCurrentPageRooms()
+      },
+
+      rooms () {
+        this.getCurrentPageRooms()
       }
     },
 
@@ -74,6 +88,11 @@ export default {
       ...mapActions({
         getRoomList: 'room/getRoomList',
       }),
+
+      getCurrentPageRooms () {
+        const start = this.ITEMS_PER_PAGE * ( this.currentPage - 1 )
+        this.showedRooms = this.rooms.slice(start, start + this.ITEMS_PER_PAGE)
+      },
 
       async onGetRoomList () {
         this.loading = true

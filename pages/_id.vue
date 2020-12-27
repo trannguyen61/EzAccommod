@@ -306,7 +306,7 @@ export default {
         }),
 
         isFavRoom (room) {
-          return Boolean(this.userFavoriteRooms.find(e => e == room._id))
+          return room ? Boolean(this.userFavoriteRooms.find(e => e == room._id)) : null
         },
 
         openImgViewer (img) {
