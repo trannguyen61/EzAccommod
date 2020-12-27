@@ -34,7 +34,7 @@
             <td>{{ i + 1 }}</td>
             <td>{{ room.roomNum }}</td>
             <td>{{ room.area }} m<sup>2</sup></td>
-            <td>{{ room.price }} VNĐ</td>
+            <td>{{ new Intl.NumberFormat('vi-VN').format(room.price.replace(/\D/g, '')) }} VNĐ</td>
             <td>
               <ul class="facilities ml-auto mr-auto">
                 <li

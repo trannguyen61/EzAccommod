@@ -2,10 +2,12 @@
   <div class="landing">
     <page-intro />
     <main>
-      <room-filter @filtered="getFilter" />
+      <room-filter
+        id="rooms"
+        @filtered="getFilter"
+      />
       <div
         v-if="!loading"
-        id="rooms"
         class="room-list"
       >
         <p

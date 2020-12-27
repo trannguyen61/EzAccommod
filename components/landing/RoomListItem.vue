@@ -26,7 +26,7 @@
           {{ roomFullAddress }}
         </div>
         <div class="price">
-          {{ room.rooms[0].price }} đồng/tháng
+          {{ new Intl.NumberFormat('vi-VN').format(room.rooms[0].price.replace(/\D/g, '')) }} đồng/tháng
         </div>
       </div>
       <v-divider class="my-3" />

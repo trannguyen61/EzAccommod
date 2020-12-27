@@ -59,10 +59,11 @@ export default {
                 if (response.authResponse) {
                     console.log(response)
                     const access_token = response.authResponse.accessToken
+                    const user_id = response.authResponse.userID
                     await vm.handleLogin(vm, access_token)
                     // await vm.handleFetchUser(vm)
                 }
-            }, {scope: 'email, public_profile'})
+            }, {scope: 'email,public_profile'})
         },
 
         async loadFacebookSDK(d, s, id) {
