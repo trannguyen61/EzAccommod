@@ -80,7 +80,6 @@
 
               <v-select
                 v-model="timeFrame"
-                :rules="requiredField()"
                 :items="defaultInfo.defaultTimeFrame"
                 item-text="name"
                 item-value="days"
@@ -117,7 +116,7 @@
         <button
           v-ripple
           type="button"
-          :disabled="!formValue1"
+          :disabled="!formValue1 && (timeFrame || expiredAt)"
           class="custom-btn custom-btn--text custom-btn__densed stepper-btn"
           @click="step = 2"
         >
@@ -464,7 +463,8 @@ export default {
     methods: {
         ...mapActions({
             submitPost: 'room/submitPost',
-            uploadImage: 'room/uploadImage'
+            uploadImage: 'room/uploadImage',
+            editPost: 'room/editPost',
         }),
 
         getChosenPost () {
@@ -472,7 +472,7 @@ export default {
 
             const vm = this
 
-            Object.keys(this.post).forEach(e => {
+            Object.keys(this.form).forEach(e => {
                 vm.form[e] = vm.post[e]
 
                 if (e == 'rooms') {
@@ -516,7 +516,7 @@ export default {
         onSubmitPost () {
           if (this.hasExistedPost){
             const data = this.onTransformData()
-            this.$emit('on-submit-post', data)
+            this.onEditPost(data)
           } else {
             this.onCreatePost()
           }
@@ -535,6 +535,22 @@ export default {
                               this.loading = false
                             })
             await this.submitPost(handler)
+        },
+
+        async onEditPost (form) {
+            this.loading = true
+
+            const data = {
+              data: form,
+              post_id: this.post._id
+            }
+            const handler = new ApiHandler()
+                            .setData(data)
+                            .setOnFinally(() => {
+                              this.loading = false
+                              this.$emit('editted')
+                            })
+            await this.editPost(handler)
         },
 
         onTransformData () {

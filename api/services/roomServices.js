@@ -9,7 +9,8 @@ import {
     API_GET_OWNER_ROOMS,
     API_PROLONG_TIME_POST,
     API_TOGGLE_ACTIVE,
-    API_FILTER_ROOM
+    API_FILTER_ROOM,
+    API_EDIT_ROOM
 } from '@/api/apiUrl'
 const axios = require('axios')
 
@@ -50,8 +51,8 @@ export default $axios => ({
         return $axios.post(API_CREATE_POST, payload)
     },
 
-    editPost () {
-        // return $axios.get(API_GET_ROOM_LIST)
+    editPost ({ post_id, data }) {
+        return $axios.put(`${API_ROOM_SERVICE}/${post_id}${API_EDIT_ROOM}`, data)
     },
 
     getPosts (query) {

@@ -12,7 +12,7 @@
       <div class="card-content">
         <create-general-post-stepper
           :post="post"
-          @on-submit-post="onSubmitPost"
+          @editted="close"
         />
       </div>
       <v-divider />
@@ -54,18 +54,6 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            editPost: 'room/editPost',
-        }),
-
-        async onSubmitPost (form) {
-            console.log(form)
-            const data = form
-            const handler = new ApiHandler()
-                            .setData(data)
-            await this.editPost(handler)
-        },
-
         open () {
             this.dialog = true
         },
