@@ -2,21 +2,49 @@
   <div class="filter-page">
     <room-filter @filtered="getFilter" />
     <v-row class="room-list">
-      <v-col>
+      <v-col v-if="!rooms.length || loading">
+        <v-row v-if="loading">
+          <v-col>
+            <v-skeleton-loader
+              type="card-avatar, article, actions"
+            />
+          </v-col>
+          <v-col>
+            <v-skeleton-loader
+              type="article, actions"
+            />
+          </v-col>
+          <v-col>
+            <v-skeleton-loader
+              type="list-item-avatar, divider, list-item-three-line, card-heading, image, actions"
+            />
+          </v-col>
+        </v-row>
         <p
-          v-if="!rooms.length"
+          v-if="!loading && !rooms.length"
           class="empty-warning"
         >
           Không tìm thấy kết quả phù hợp!
         </p>
       </v-col>
+      <template v-if="!loading">
+        <v-col
+          v-for="room in rooms"
+          :key="room.id"
+          cols="12"
+          md="4"
+        >
+          <filter-item :room="room" />
+        </v-col>
+      </template>
       <v-col
-        v-for="room in rooms"
-        :key="room.id"
+        v-if="rooms.length && !loading"
         cols="12"
-        md="4"
       >
-        <filter-item :room="room" />
+        <v-pagination
+          v-model="currentPage"
+          :length="totalPage"
+        />
       </v-col>
     </v-row>
   </div>
@@ -34,14 +62,21 @@ export default {
 
     data () {
         return {
-            rooms: []
+            rooms: [],
+            loading: false,
+            currentPage: 1,
+            ITEMS_PER_PAGE: 9
         }
     },
 
     computed: {
         ...mapGetters({
             filter: 'room/filter'
-        })
+        }),
+
+        totalPage () {
+          return Math.ceil(this.rooms.length / this.ITEMS_PER_PAGE)
+        }
     },
 
     mounted () {
@@ -55,7 +90,11 @@ export default {
         }),
 
         async onGetRoomList () {
-            const handler = new ApiHandler().setOnResponse(res => this.rooms = res)
+            this.loading = true
+
+            const handler = new ApiHandler()
+                          .setOnResponse(res => this.rooms = res)
+                          .setOnFinally(() => this.loading = false)
             await this.getRoomList(handler)
         },
 
@@ -69,10 +108,11 @@ export default {
         },
 
         async onFilterRooms () {
-            const data = this.filter
+            this.loading = true
+
             const handler = new ApiHandler()
-                        .setData(data)
-                        .setOnResponse(res => this.rooms = res)
+                          .setOnResponse(res => this.rooms = res.posts)
+                          .setOnFinally(() => this.loading = false)
             await this.filterRooms(handler)
         },
     }

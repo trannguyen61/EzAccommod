@@ -44,8 +44,10 @@
           </div>
           <div class="item--input">
             <v-select
-              v-model="filter.city"
-              :items="[1, 2, 3]"
+              v-model="filter.address.city"
+              :items="defaultInfo.cities"
+              item-text="name"
+              item-value="id"
               label="Thành phố"
               outlined
               hide-details
@@ -53,9 +55,11 @@
               class="mb-2"
             />
             <v-select
-              v-model="filter.district"
-              :items="[1, 2, 3]"
-              :disabled="!filter.city"
+              v-model="filter.address.district"
+              :items="defaultInfo.hanoiDistricts"
+              item-text="name"
+              item-value="id"
+              :disabled="!filter.address.city"
               label="Quận/huyện"
               outlined
               hide-details
@@ -63,9 +67,11 @@
               class="mb-2"
             />
             <v-select
-              v-model="filter.ward"
-              :items="[1, 2, 3]"
-              :disabled="!filter.district"
+              v-model="filter.address.ward"
+              :items="defaultInfo.hanoiWards"
+              item-text="name"
+              item-value="id"
+              :disabled="!filter.address.district"
               label="Phường"
               outlined
               hide-details
@@ -85,10 +91,11 @@
               v-model="filter.price"
               color="dark"
               step="100"
-              :min="defaultRoom.roomPriceRanges[0]"
-              :max="defaultRoom.roomPriceRanges[1]"
+              :min="defaultInfo.roomPriceRanges[0]"
+              :max="defaultInfo.roomPriceRanges[1]"
               :thumb-label="true"
               :thumb-color="'primary'"
+              hide-details
             />
           </div>
         </div>
@@ -100,8 +107,8 @@
           </div>
           <div class="item--input">
             <v-select
-              v-model="filter.roomTypes"
-              :items="defaultRoom.roomTypes"
+              v-model="filter.type"
+              :items="defaultInfo.roomTypes"
               item-value="id"
               item-text="name"
               multiple
@@ -124,10 +131,11 @@
               v-model="filter.area"
               color="dark"
               step="10"
-              :min="defaultRoom.roomAreaRange[0]"
-              :max="defaultRoom.roomAreaRange[1]"
+              :min="defaultInfo.roomAreaRange[0]"
+              :max="defaultInfo.roomAreaRange[1]"
               :thumb-label="true"
               :thumb-color="'primary'"
+              hide-details
             />
           </div>
         </div>
@@ -140,7 +148,7 @@
           <div class="item--input">
             <v-select
               v-model="filter.services"
-              :items="defaultRoom.roomFacilities"
+              :items="defaultInfo.roomFacilities"
               item-value="value"
               item-text="name"
               multiple
@@ -166,7 +174,7 @@
 </template>
 
 <script>
-import { ROOM_PRICE_RANGE, ROOM_TYPES, ROOM_SQUARE_RANGE, ROOM_FACILITIES } from '@/consts/consts'
+import { ROOM_PRICE_RANGE, ROOM_TYPES, ROOM_SQUARE_RANGE, ROOM_FACILITIES, CITIES, HANOI_DISTRICTS, HANOI_WARDS } from '@/consts/consts'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -175,20 +183,34 @@ export default {
             showFilter: this.$vuetify.breakpoint.mdAndUp, 
             filter: {
                 price: [500, 7000],
-                roomTypes: [],
-                area: [10, 100],
+                type: [],
+                area: [0, 200],
                 services: [],
-                city: null,
-                district: null,
-                ward: null
+                address: {
+                  city: null,
+                  district: null,
+                  ward: null
+                }
             },
-            defaultRoom: {
+            defaultInfo: {
                 roomPriceRanges: ROOM_PRICE_RANGE,
                 roomTypes: ROOM_TYPES,
                 roomAreaRange: ROOM_SQUARE_RANGE,
-                roomFacilities: ROOM_FACILITIES
+                roomFacilities: ROOM_FACILITIES,
+                cities: CITIES, 
+                hanoiDistricts: HANOI_DISTRICTS,
+                hanoiWards: HANOI_WARDS
             }
         }
+    },
+
+    watch: {
+      'filter.address.district': {
+        handler() {
+          this.defaultInfo.hanoiWards = HANOI_WARDS.filter(e =>  e.district == this.filter.address.district )
+        },
+        deep: true
+      },
     },
 
     methods: {
@@ -197,8 +219,35 @@ export default {
       }),
 
       onFilterRoom () {
+        const filter = this.onTransformData()
+        this.setFilter(filter)
+
         this.$emit('filtered')
-        this.setFilter(this.filter)
+      },
+
+      onTransformData () {
+        const address = {}
+        Object.keys(this.filter.address).forEach(e => {
+          if (this.filter.address[e]) {
+            address[e] = this.filter.address[e]
+          }
+        })
+
+        const minPrice = ( this.filter.price[0] * 1000 ) + ""
+        const maxPrice = ( this.filter.price[1] * 1000 ) + ""
+
+        const filter = {
+          address,
+          minArea: this.filter.area[0],
+          maxArea: this.filter.area[1],
+          minPrice,
+          maxPrice
+        }
+
+        if (this.filter.services.length) filter.services = this.filter.services
+        if (this.filter.type.length) filter.type = this.filter.type
+
+        return filter
       }
     }
 }

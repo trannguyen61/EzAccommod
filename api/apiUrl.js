@@ -10,6 +10,7 @@ export const IMAGE_UPLOAD_URL = 'https://api.imgur.com/3/upload'
 export const API_USER = '/user'
 export const API_SIGNUP = API_USER + '/register'
 export const API_LOGIN = API_USER + '/login'
+export const API_LOGIN_FACEBOOK = API_USER + '/login-facebook'
 
 /*
 * ROOM SERVICES
@@ -24,3 +25,4 @@ export const API_REMOVE_FAVORITE_ROOM = '/remove-favorite'
 export const API_GET_OWNER_ROOMS = API_ROOM_SERVICE + '/get-user-post'
 export const API_PROLONG_TIME_POST = '/prolong-time-post'
 export const API_TOGGLE_ACTIVE = '/toggle-active-post'
+export const API_FILTER_ROOM = API_ROOM_SERVICE + '/search'

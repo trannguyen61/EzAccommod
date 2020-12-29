@@ -14,9 +14,17 @@
       max-width="20px"
       class="mr-2"
     />
-    <div style="color: white;">
+    <div
+      v-if="!loading"
+      style="color: white;"
+    >
       {{ $vuetify.breakpoint.mdAndUp ? 'Đăng nhập với Facebook' : 'Đăng nhập' }}
     </div>
+    <v-progress-circular
+      v-if="loading"
+      indeterminate
+      color="white"
+    />
   </v-btn>
 </template>
 
@@ -25,6 +33,12 @@ import { mapActions } from 'vuex'
 import ApiHandler from '@/helpers/ApiHandler'
 
 export default {
+    data () {
+        return {
+            loading: false
+        }
+    },
+
     methods: {
         ...mapActions({
             loginWithFacebook: 'user/loginWithFacebook',
@@ -60,7 +74,7 @@ export default {
                     console.log(response)
                     const access_token = response.authResponse.accessToken
                     const user_id = response.authResponse.userID
-                    await vm.handleLogin(vm, access_token)
+                    await vm.handleLogin(vm, access_token, user_id)
                     // await vm.handleFetchUser(vm)
                 }
             }, {scope: 'email,public_profile'})
@@ -78,11 +92,22 @@ export default {
             fjs.parentNode.insertBefore(js, fjs)
         },
 
-        async handleLogin(vm, access_token) {
-            const data = new FormData()
-            data.append('access_token', access_token)
+        async handleLogin(vm, access_token, user_id) {
+            this.loading = true
+
+            const data = {
+                access_token,
+                user_id
+            }
                     
-            const loginHandler = new ApiHandler().setData(data)
+            const loginHandler = new ApiHandler()
+                                .setData(data)
+                                .setOnResponse(() => {
+                                    this.$router.push('/')
+                                })
+                                .setOnFinally(() => {
+                                    this.loading = false
+                                })
             await vm.loginWithFacebook(loginHandler)
         },
 

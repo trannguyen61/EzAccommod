@@ -131,7 +131,7 @@ export const ROOM_TYPES = [
     { name: 'Nhà nguyên căn', id: "3"}, 
     { name: 'Chung cư nguyên căn', id: "4"} 
 ]
-export const ROOM_SQUARE_RANGE = [ 10, 100 ]
+export const ROOM_SQUARE_RANGE = [ 0, 200 ]
 export const ROOM_FACILITIES = [ 
     { name: 'Phòng tắm khép kín', value: "1"}, 
     { name: 'Có nóng lạnh', value: "2"}, 

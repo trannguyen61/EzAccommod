@@ -8,7 +8,8 @@ import {
     API_REMOVE_FAVORITE_ROOM,
     API_GET_OWNER_ROOMS,
     API_PROLONG_TIME_POST,
-    API_TOGGLE_ACTIVE
+    API_TOGGLE_ACTIVE,
+    API_FILTER_ROOM
 } from '@/api/apiUrl'
 const axios = require('axios')
 
@@ -18,7 +19,7 @@ export default $axios => ({
     },
 
     filterRooms (payload) {
-        // return $axios.get(API_GET_ROOM_LIST)
+        return $axios.post(API_FILTER_ROOM, payload)
     },
 
     favoriteRoom ({ post_id }) {

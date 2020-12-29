@@ -34,9 +34,10 @@ export const actions = {
         await handler.setOnRequest(onRequest).execute()
     },
 
-    async filterRooms ({ commit }, handler) {
+    async filterRooms ({ commit, getters }, handler) {
         const onRequest = async () => {
-            const rawData = await this.$roomServices.filterRooms(handler.data)
+            const filter = getters.filter
+            const rawData = await this.$roomServices.filterRooms(filter)
             const response = new ResponseHelper(rawData)
             
             if (response.isSuccess()) {

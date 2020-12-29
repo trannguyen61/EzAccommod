@@ -37,9 +37,14 @@
           v-ripple
           class="custom-btn custom-btn--text custom-btn__densed"
           :disabled="!report.length"
-          @click="close"
+          @click="onReportRoom"
         >
-          Gửi báo cáo
+          {{ !loading ? 'Gửi báo cáo' : '' }}
+          <v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="primary"
+          />
         </button>
       </v-card-actions>
     </v-card>
@@ -62,6 +67,7 @@ export default {
     data () {
         return {
             dialog: false,
+            loading: false,
             report: [],
             detail: '',
             violations: ROOM_VIOLATIONS
@@ -74,6 +80,8 @@ export default {
         }),
 
         async onReportRoom () {
+            this.loading = true
+
             const data = { 
               post_id: this.id,
               data: {
@@ -83,6 +91,10 @@ export default {
             }
             const handler = new ApiHandler()
                             .setData(data)
+                            .setOnFinally(() => {
+                              this.loading = false
+                              this.close()
+                            })
             await this.reportRoom(handler)
         },
 

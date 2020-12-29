@@ -116,9 +116,14 @@ export const actions = {
         const response = new ResponseHelper(rawData)
 
         if (response.isSuccess()) {
-          const { access_token } = response.getData()
-          commit('setAccessToken', access_token)
-          return access_token
+          const { token, user } = response.getData()
+
+          if (user.role != 'renter' && user.role != 'owner') {
+            throw new CustomError("Đăng nhập thất bại", 'Vui lòng đăng nhập bằng tài khoản người dùng/người cho thuê.')
+          }
+
+          commit('setAccessToken', token)
+          commit('setUser', user)
         } else {
           const errorMessage = response.getErrorMessage()
           throw new CustomError("Đăng nhập thất bại", errorMessage)

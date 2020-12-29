@@ -4,7 +4,7 @@
   >
     <div
       class="title-group"
-      @click="$router.push(`/${room.id}`)"
+      @click="$router.push(`/${room._id}`)"
     >
       <div class="title">
         {{ defaultRoom.roomTypes.find(e => e.id == room.type).name || '' }}

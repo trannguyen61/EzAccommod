@@ -49,7 +49,7 @@ import RoomListItem from '@/components/landing/RoomListItem'
 import RoomFilter from '@/components/landing/RoomFilter'
 
 import ApiHandler from '@/helpers/ApiHandler'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
 
@@ -75,7 +75,8 @@ export default {
 
     computed: {
       ...mapGetters({
-        userFavoriteRooms: 'user/userFavoriteRooms'
+        userFavoriteRooms: 'user/userFavoriteRooms',
+        filter: 'room/filter'
       }),
 
       totalPage () {
@@ -94,6 +95,7 @@ export default {
     },
 
     mounted () {
+      this.setFilter(null)
       this.onGetFavoriteRooms()
     },
 
@@ -101,6 +103,10 @@ export default {
         ...mapActions({
             filterRooms: 'room/filterRooms',
             getRoomList: 'room/getRoomList'
+        }),
+
+        ...mapMutations({
+          setFilter: 'room/setFilter'
         }),
 
         getCurrentPageRooms () {
@@ -135,10 +141,8 @@ export default {
         },
 
         async onFilterRooms () {
-            const data = this.filter
             const handler = new ApiHandler()
-                        .setData(data)
-                        .setOnResponse(res => this.rooms = res)
+                          .setOnResponse(res => this.rooms = res.posts)
             await this.filterRooms(handler)
         },
     }
