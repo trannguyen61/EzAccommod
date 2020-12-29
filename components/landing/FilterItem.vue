@@ -16,7 +16,7 @@
         </v-icon>
       </div>
       <img
-        :src="require('@/assets/images/room01.jpg')"
+        :src="getImage()"
         alt=""
         class="img"
       >
@@ -106,6 +106,11 @@ export default {
         favoriteRoom: 'room/favoriteRoom',
         removeFavoriteRoom: 'room/removeFavoriteRoom'
       }),
+
+      getImage () {
+        if (!this.room.images.length) return require('@/assets/images/room01.jpg')
+        else return this.room.images[0]
+      },
 
       isFavRoom (room) {
         return Boolean(this.userFavoriteRooms.find(e => e == room._id))

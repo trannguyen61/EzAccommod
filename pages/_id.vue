@@ -15,7 +15,7 @@
               class="carousel"
             >
               <v-carousel-item
-                v-for="(img, i) in room.imgs"
+                v-for="(img, i) in room.images"
                 :key="i"
               >
                 <div class="carousel-mask">
@@ -29,7 +29,7 @@
                   </v-icon>
                 </div>
                 <img
-                  :src="require('@/assets/images/room01.jpg')"
+                  :src="img"
                   alt=""
                   class="carousel-img"
                 >

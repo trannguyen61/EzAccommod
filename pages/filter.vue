@@ -29,7 +29,7 @@
       </v-col>
       <template v-if="!loading">
         <v-col
-          v-for="room in rooms"
+          v-for="room in showedRooms"
           :key="room.id"
           cols="12"
           md="4"
@@ -63,6 +63,7 @@ export default {
     data () {
         return {
             rooms: [],
+            showedRooms: [],
             loading: false,
             currentPage: 1,
             ITEMS_PER_PAGE: 9
@@ -79,6 +80,16 @@ export default {
         }
     },
 
+    watch: {
+      currentPage () {
+        this.getCurrentPageRooms()
+      },
+
+      rooms () {
+        this.getCurrentPageRooms()
+      },
+    },
+
     mounted () {
       this.onFilterRooms()
     },
@@ -88,6 +99,11 @@ export default {
             getRoomList: 'room/getRoomList',
             filterRooms: 'room/filterRooms'
         }),
+
+        getCurrentPageRooms () {
+          const start = this.ITEMS_PER_PAGE * ( this.currentPage - 1 )
+          this.showedRooms = this.rooms.slice(start, start + this.ITEMS_PER_PAGE)
+        },
 
         async onGetRoomList () {
             this.loading = true
