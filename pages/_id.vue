@@ -233,7 +233,7 @@
         lg="6"
         md="8"
       >
-        <room-review :post="room" />
+        <room-review :reviews="reviews" />
       </v-col>
     </v-row>
 
@@ -262,6 +262,7 @@ export default {
             loading: false,
             id: null,
             room: null,
+            reviews: null,
             defaultRoom: {
                 roomTypes: ROOM_TYPES,
                 roomFacilities: ROOM_FACILITIES,
@@ -349,6 +350,7 @@ export default {
                             .setOnResponse(res => {
                               console.log(res)
                               this.room = res.post
+                              this.reviews = res.reviews
                             })
                             .setOnError(() => {
                               Vue.notify({

@@ -51,11 +51,12 @@
     <div class="show-review" />
     <template v-if="!loading">
       <review-item
-        v-for="(cmt, i) in commentList"
+        v-for="(cmt, i) in showedReviews"
         :key="i"
         :comment="cmt"
       />
       <v-pagination
+        v-if="!!reviews"
         v-model="currentPage"
         :length="totalPage"
       />
@@ -79,9 +80,9 @@ export default {
     components: { ReviewItem },
 
     props: {
-      post: {
-        type: Object,
-        default: () => ({})
+      reviews: {
+        type: Array,
+        default: () => ([])
       }
     },
 
@@ -89,18 +90,12 @@ export default {
         return {
             loading: false,
             submitLoading: false,
+            showedReviews: [],
             star: 3,
             title: '',
             content: '',
-            commentList: [{
-                id: '123',
-                title: 'Nhu cut',
-                owner: 'Kaji Akihiko',
-                star: 4,
-                content: 'Giao hàng qua TIKI NOW nên rất nhanh, đặt lúc 9h thì 10h30 đã có hàng. Hàng được đóng gói tốt, không có một vết bẩn :). Mình size 41 nhưng nghe mấy review trước đặt lớn hơn 1 size nên mang rất vừa chân, không bị bó.'
-            }],
             currentPage: 1,
-            totalPage: 1
+            ITEMS_PER_PAGE: 3
         }
     },
 
@@ -109,16 +104,34 @@ export default {
             return [v => v.length <= 450 || 'Tối đa 450 ký tự.']
         },
 
-        postId () {
-          return this.post ? this.post._id : ''
-        }
+        totalPage () {
+          if (!this.reviews) return 0
+          return Math.ceil(this.reviews.length / this.ITEMS_PER_PAGE)
+        },
+    },
+
+    watch: {
+      currentPage () {
+          this.getCurrentPageRooms()
+        },
+
+        reviews: {
+          handler () {
+            this.getCurrentPageRooms()
+          },
+          deep: true
+        },
     },
 
     methods: {
         ...mapActions({
-            submitReview: 'room/submitReview',
-            getReviews: 'room/getReviews'
+            submitReview: 'room/submitReview'
         }),
+
+        getCurrentPageRooms () {
+          const start = this.ITEMS_PER_PAGE * ( this.currentPage - 1 )
+          this.showedReviews = this.reviews.slice(start, start + this.ITEMS_PER_PAGE)
+        },
 
         async onSubmitReview () {
             this.submitLoading = true
@@ -139,17 +152,6 @@ export default {
                           .setOnFinally(() => {
                             this.submitLoading = false
                           })
-            await this.submitReview(handler)
-        },
-
-        async onGetReviews () {
-            this.loading = true
-
-            const handler = new ApiHandler()
-                            .setOnResponse(res => this.commentList = res)
-                            .setOnFinally(() => {
-                              this.loading = false
-                            })
             await this.submitReview(handler)
         },
 
