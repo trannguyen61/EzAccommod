@@ -464,6 +464,7 @@ export default {
         ...mapActions({
             submitPost: 'room/submitPost',
             uploadImage: 'room/uploadImage',
+            editRoom: 'room/editRoom',
             editPost: 'room/editPost',
         }),
 
@@ -516,7 +517,19 @@ export default {
         onSubmitPost () {
           if (this.hasExistedPost){
             const data = this.onTransformData()
-            this.onEditPost(data)
+            let roomData = {}
+            let postData = {}
+
+            Object.keys(data).forEach(e => {
+              if (e == 'rooms') {
+                roomData = data.rooms[0]
+              } else {
+                postData[e] = data[e]
+              }
+            })
+
+            this.onEditRoom(roomData)
+            this.onEditPost(postData)
           } else {
             this.onCreatePost()
           }
@@ -535,6 +548,18 @@ export default {
                               this.loading = false
                             })
             await this.submitPost(handler)
+        },
+
+        async onEditRoom (form) {
+            this.loading = true
+
+            const data = {
+              data: form,
+              post_id: this.post._id
+            }
+            const handler = new ApiHandler()
+                            .setData(data)
+            await this.editRoom(handler)
         },
 
         async onEditPost (form) {
