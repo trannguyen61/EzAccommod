@@ -7,6 +7,9 @@ export default {
         redirect('/app/favorite')
       } else if (store.getters['user/isOwner']) {
         redirect('/app/post-list')
+      } else {
+        store.dispatch('user/logout')
+        redirect('/')
       }
     }
 }

@@ -36,6 +36,7 @@
         </template>
         <template #item.active="{ item }">
           <v-switch
+            inset
             :readonly="!item.checked"
             :input-value="item.active"
             @mousedown="onCheckActivePost(item)"

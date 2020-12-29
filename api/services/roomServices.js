@@ -11,7 +11,8 @@ import {
     API_TOGGLE_ACTIVE,
     API_FILTER_ROOM,
     API_EDIT_ROOM,
-    API_EDIT_POST
+    API_EDIT_POST,
+    API_UPLOAD_IMAGE
 } from '@/api/apiUrl'
 const axios = require('axios')
 
@@ -50,6 +51,10 @@ export default $axios => ({
     
     submitPost (payload) {
         return $axios.post(API_CREATE_POST, payload)
+    },
+
+    uploadImage ({ post_id, data }) {
+        return $axios.post(`${API_ROOM_SERVICE}/${post_id}${API_UPLOAD_IMAGE}`, data)
     },
 
     editRoom ({ post_id, data }) {
