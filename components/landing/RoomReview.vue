@@ -83,7 +83,12 @@ export default {
       reviews: {
         type: Array,
         default: () => ([])
-      }
+      },
+
+      room: {
+        type: Object,
+        default: () => ({})
+      },
     },
 
     data () {
@@ -108,6 +113,10 @@ export default {
           if (!this.reviews) return 0
           return Math.ceil(this.reviews.length / this.ITEMS_PER_PAGE)
         },
+
+        postId () {
+          return this.room ? this.room._id : ''
+        }
     },
 
     watch: {

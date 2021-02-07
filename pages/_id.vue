@@ -233,7 +233,10 @@
         lg="6"
         md="8"
       >
-        <room-review :reviews="reviews" />
+        <room-review
+          :reviews="reviews"
+          :room="room"
+        />
       </v-col>
     </v-row>
 
@@ -325,10 +328,10 @@ export default {
               return
             }
 
-            const data = { post_id: this.postId }
+            const data = { post_id: this.id }
             const handler = new ApiHandler().setData(data)
 
-            const alreadyFavRoom = this.userFavoriteRooms.find(e => e == this.postId)
+            const alreadyFavRoom = this.userFavoriteRooms.find(e => e == this.id)
 
             if (alreadyFavRoom) {
               await this.removeFavoriteRoom(handler)

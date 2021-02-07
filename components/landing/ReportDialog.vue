@@ -85,7 +85,7 @@ export default {
             const data = { 
               post_id: this.id,
               data: {
-                report: this.report,
+                type: this.report,
                 detail: this.detail
               }
             }

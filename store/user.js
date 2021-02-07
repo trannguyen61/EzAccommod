@@ -4,7 +4,8 @@ import Vue from 'vue'
 
 export const state = () => ({
   access_token: null,
-  user: null
+  user: null,
+  notif: []
 })
 
 export const getters = {
@@ -77,6 +78,13 @@ export const actions = {
 
         if (response.isSuccess()) {
           const { token, user } = response.getData()
+          if (!user.authenticated) {
+            Vue.notify({
+              type: 'success',
+              title: 'Đăng ký thành công. Vui lòng liên hệ công ty để xác thực tài khoản.',
+            })
+            return
+          }
           commit('setAccessToken', token)
           commit('setUser', user)
         } else {
@@ -98,6 +106,9 @@ export const actions = {
 
           if (user.role != 'renter' && user.role != 'owner') {
             throw new CustomError("Đăng nhập thất bại", 'Vui lòng đăng nhập bằng tài khoản người dùng/người cho thuê.')
+          }
+          if (user.role == 'owner' && !user.authenticated) {
+            throw new CustomError("Đăng nhập thất bại", 'Vui lòng liên hệ công ty để xác thực tài khoản.')            
           }
 
           commit('setAccessToken', token)
@@ -142,6 +153,21 @@ export const actions = {
         } else {
           const errorMessage = response.getErrorMessage()
           throw new CustomError("Lấy thông tin người dùng thất bại", errorMessage)
+        }  
+      }
+      await handler.setOnRequest(onRequest).execute()
+    },
+
+    async getNotif({ commit }, handler) {
+      const onRequest = async () => {
+        const rawData = await this.$userServices.getNotif()
+        const response = new ResponseHelper(rawData)
+        
+        if (response.isSuccess()) {
+          commit('setNotif', response.getData())
+        } else {
+          const errorMessage = response.getErrorMessage()
+          throw new CustomError("Lấy thông báo người dùng thất bại", errorMessage)
         }  
       }
       await handler.setOnRequest(onRequest).execute()

@@ -29,3 +29,8 @@ export const API_FILTER_ROOM = API_ROOM_SERVICE + '/search'
 export const API_EDIT_ROOM = '/edit-room'
 export const API_EDIT_POST = '/edit-post'
 export const API_UPLOAD_IMAGE = '/upload-image'
+
+/*
+*   NOTIFICATIONS
+*/
+export const API_GET_NOTIF = '/notification'

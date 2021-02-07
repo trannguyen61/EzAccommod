@@ -12,7 +12,7 @@
       <div class="card-content">
         <create-general-post-stepper
           :post="post"
-          @editted="close"
+          @editted="onFinishEditing"
         />
       </div>
       <v-divider />
@@ -54,6 +54,11 @@ export default {
     },
 
     methods: {
+      onFinishEditing () {
+        this.$emit('editted')
+        this.close()
+      },
+
         open () {
             this.dialog = true
         },

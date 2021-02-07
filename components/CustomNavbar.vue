@@ -9,7 +9,7 @@
 
     <!-- Button for all screens + Logged in -->
     <template v-if="loggedIn">
-      <v-btn
+      <!-- <v-btn
         icon
         class="mr-6"
       >
@@ -23,7 +23,7 @@
             fas fa-bell
           </v-icon>
         </v-badge>
-      </v-btn>
+      </v-btn> -->
     </template>
 
     <!-- Button for medium and up screens + Logged in -->
@@ -208,7 +208,7 @@ export default {
     async onLogout () {
       this.logout()
       this.$router.push('/')
-    }
+    },
   }
 }
 </script>

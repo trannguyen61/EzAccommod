@@ -142,7 +142,11 @@ export default {
 
         async onFilterRooms () {
             const handler = new ApiHandler()
-                          .setOnResponse(res => this.rooms = res.posts)
+                          .setOnResponse(res => {
+                            this.rooms = res.posts.filter(room => 
+                              this.userFavoriteRooms.some(e => e == room._id)
+                            )
+                          })
             await this.filterRooms(handler)
         },
     }
