@@ -1,4 +1,4 @@
-import ResponseHelper from '@/helpers/ResponseHelper'
+import ResponseHelper from '@/helpers/responseHelper'
 import CustomError from '@/helpers/CustomError'
 import Vue from 'vue'
 
