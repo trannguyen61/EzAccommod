@@ -32,7 +32,8 @@
           v-for="room in showedRooms"
           :key="room.id"
           cols="12"
-          md="4"
+          md="6"
+          lg="4"
         >
           <filter-item :room="room" />
         </v-col>
