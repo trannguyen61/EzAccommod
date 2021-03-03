@@ -41,6 +41,9 @@ export default {
             const data = form
             const handler = new ApiHandler()
                             .setData(data)
+                            .setOnResponse(() => {
+                              this.$router.push('post-list')
+                            })
             await this.submitPost(handler)
         },
     }

@@ -144,7 +144,6 @@ export default {
             headers: [
               { text: "ID phòng", value: "_id" },
               { text: "Loại phòng", value: "type", width: "10%" },
-              { text: "Lượt xem", value: "views" },
               { text: "Yêu thích", value: "saved" },
               { text: "Trạng thái duyệt", value: "checked" },
               { text: "Phí bài đăng", value: "postPrice" },

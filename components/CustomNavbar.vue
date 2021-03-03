@@ -9,21 +9,72 @@
 
     <!-- Button for all screens + Logged in -->
     <template v-if="loggedIn">
-      <!-- <v-btn
-        icon
-        class="mr-6"
+      <v-menu
+        open-on-hover
+        bottom
+        offset-y
       >
-        <v-badge
-          :content="notif"
-          :value="notif"
-          color="primary"
-          overlap
-        >
-          <v-icon>
-            fas fa-bell
-          </v-icon>
-        </v-badge>
-      </v-btn> -->
+        <template #activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            icon
+            class="mr-6"
+            v-on="on"
+          >
+            <v-badge
+              :content="unreadNotif"
+              :value="unreadNotif"
+              color="primary"
+              overlap
+            >
+              <v-icon>
+                fas fa-bell
+              </v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+
+        <v-list class="notification-bar">
+          <v-btn
+            small
+            text
+            class="d-block ml-auto mr-1 mb-3"
+            @click="onReadAllNotif"
+          >
+            Đánh dấu đọc tất cả
+            <v-icon
+              small
+              class="ml-3"
+            >
+              fas fa-check-double
+            </v-icon>
+          </v-btn>
+          <div
+            v-if="!notif.length"
+            class="text-center mb-3"
+          >
+            Không có thông báo
+          </div>
+          <v-list-item
+            v-for="noti in notif"
+            :key="noti.id"
+            :class="getNotiClass(noti)"
+          >
+            <small class="mr-3">{{
+              formatDate(noti.created.split("T")[0])
+            }}</small>
+            {{ getNotiText(noti) }}
+            <v-btn
+              v-if="!noti.read"
+              class="ml-6"
+              icon
+              @click="onReadNotif(noti)"
+            >
+              <v-icon>fas fa-check</v-icon>
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </template>
 
     <!-- Button for medium and up screens + Logged in -->
@@ -104,16 +155,16 @@
 
     <!-- Hamburger toggle navigation bar for small and down screen - Including sidebar -->
     <template v-if="$vuetify.breakpoint.smAndDown && !sidebar">
-      <v-menu 
+      <v-menu
         offset-y
         transition="slide-y-transition"
         min-width="120px"
       >
         <template #activator="{ on, attrs }">
-          <v-btn 
+          <v-btn
             v-bind="attrs"
-            icon 
-            v-on="on" 
+            icon
+            v-on="on"
             @click="menu = !menu"
           >
             <v-icon color="primary">
@@ -177,7 +228,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import ApiHandler from "@/helpers/ApiHandler"
+import { mapGetters, mapActions } from "vuex"
+import { formatISOdate } from "@/helpers/dateHelper"
 
 export default {
   props: {
@@ -187,28 +240,94 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       menu: false,
-      notif: 1
+      formatDate: formatISOdate
     }
   },
 
   computed: {
     ...mapGetters({
-      loggedIn: 'user/loggedIn'
+      loggedIn: "user/loggedIn",
+      notif: "user/notif",
+      unreadNotif: "user/unreadNotif"
     })
+  },
+
+  watch: {
+    loggedIn(value) {
+      if (value) {
+        this.onGetPusher()
+        this.onGetNotif()
+      }
+    }
+  },
+
+  mounted() {
+    if (this.loggedIn) {
+      this.onGetPusher()
+      this.onGetNotif()
+    }
   },
 
   methods: {
     ...mapActions({
-      logout: 'user/logout'
+      logout: "user/logout",
+      getNotif: "user/getNotif",
+      readNotif: "user/readNotif",
+      removePusher: "user/removePusher",
+      readAllNotif: "user/readAllNotif",
+      getPusher: 'user/getPusher'
     }),
-    
-    async onLogout () {
-      this.logout()
-      this.$router.push('/')
+
+    onGetPusher () {
+      this.getPusher(this)
     },
+
+    onRemovePusher() {
+      this.removePusher(this)
+    },
+
+    async onGetNotif() {
+      const handler = new ApiHandler()
+      await this.getNotif(handler)
+    },
+
+    async onReadNotif(noti) {
+      const data = {
+        id: noti.ID
+      }
+      const handler = new ApiHandler().setData(data).setOnResponse(() => {
+        this.onGetNotif()
+      })
+      await this.readNotif(handler)
+    },
+
+    async onReadAllNotif() {
+      const handler = new ApiHandler().setOnResponse(() => {
+        this.onGetNotif()
+      })
+      await this.readAllNotif(handler)
+    },
+
+    async onLogout() {
+      this.logout()
+      this.$router.push("/")
+    },
+
+    getNotiClass(noti) {
+      if (noti.seen) return "noti noti--seen"
+      else if (noti.type == "post") return "noti noti--post"
+      else if (noti.type == "review") return "noti noti--review"
+    },
+
+    getNotiText(noti) {
+      if (noti.type == "post")
+        return "Bài đăng của bạn đã được quản trị viên xét duyệt!"
+      if (noti.type == "review")
+        return "Bình luận của bạn đã được quản trị viên xét duyệt!"
+    }
   }
 }
 </script>
