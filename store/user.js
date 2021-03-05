@@ -190,24 +190,29 @@ export const actions = {
 
     getPusher({commit, getters}, vm) {
       if (getters.pusher) return
+      
 
-      var channel = vm.$pusher.subscribe(`user-${getters.user._id}`)
+      const channel = vm.$pusher.subscribe(`user-${getters.user._id}`)
       commit('setPusher', true)
 
-      channel.bind("post-authenticated", data => {
-        console.log(data)
-        commit('concatNotif', data.data.notification)
-        commit('setUnreadNotif', data.data.not_seen_noti)
-      })
+      if (getters.user.role == 'owner') {
+        channel.bind("post-authenticated", data => {
+          console.log(data)
+          commit('concatNotif', data.data.notification)
+          commit('setUnreadNotif', data.data.not_seen_noti)
+        })  
+      } else if (getters.user.role == 'renter') {
+        channel.bind("review-authenticated", data => {
+          console.log(data)
+          commit('concatNotif', data.data.notification)
+          commit('setUnreadNotif', data.data.not_seen_noti)
+        })  
+      }
 
-      channel.bind("review-authenticated", data => {
-        console.log(data)
-        commit('concatNotif', data.data.notification)
-        commit('setUnreadNotif', data.data.not_seen_noti)
-      })
     },  
 
     removePusher({commit}, vm) {
+      commit('setPusher', false)
       vm.$pusher.unsubscribe('admin-notification')
     },
 

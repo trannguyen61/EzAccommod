@@ -4,7 +4,7 @@
       Tạo bài đăng cho thuê phòng
     </div>
     <div class="create-post--content mt-4">
-      <create-general-post-stepper />
+      <create-general-post-stepper @editted="$router.push('/app/post-list')" />
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
             const handler = new ApiHandler()
                             .setData(data)
                             .setOnResponse(() => {
-                              this.$router.push('post-list')
+                              this.$router.push('/app/post-list')
                             })
             await this.submitPost(handler)
         },

@@ -312,6 +312,7 @@ export default {
     },
 
     async onLogout() {
+      this.onRemovePusher(this)
       this.logout()
       this.$router.push("/")
     },
