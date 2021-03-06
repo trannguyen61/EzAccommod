@@ -67,7 +67,7 @@
                   </v-icon>
                 </v-btn>
               </template>
-              <span>{{ !!room ? `${room.like} ` : '' }} Yêu thích</span>
+              <span>{{ !!room ? `${room.saved} ` : '' }} Yêu thích</span>
             </v-tooltip>
             <v-tooltip top>
               <template #activator="{ on, attrs }">
